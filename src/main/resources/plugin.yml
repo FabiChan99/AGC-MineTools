@@ -1,4 +1,4 @@
-name: AGC MineTools
+name: AGC-MineTools
 version: '${project.version}'
 main: me.fabichan.agcminetools.Main
 api-version: '1.20'

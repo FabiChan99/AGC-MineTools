@@ -1,0 +1,18 @@
+bot:
+  token: "DISCORD_BOT_TOKEN"
+  teamroleid: "TEAM_ROLE_ID"
+  guildid: "GUILD_ID"
+database:
+  host: "localhost"
+  port: 5432
+  name: "meineDatenbank"
+  user: "dbUser"
+  password: "dbPasswort"
+settings:
+  chatprefix: "&8[&6AGC MineTools&8] &7"
+  kickmessage_notinserver: "&cDu bist nicht auf AGC! Du musst auf AGC sein, um spielen zu können!"
+  kickmessage_notinteam: "&cMaintenance Mode! Du musst im Serverteam sein, um spielen zu können!"
+  kickmessage_notinwhitelist: "&cDu bist nicht auf der Whitelist! Du musst auf der Whitelist sein, um spielen zu können!"
+  kickmessage_banned: "&cDu wurdest auf AGC gebannt! Du kannst nicht spielen!"
+  kickmessage_nichtverknuepft: "&cUm spielen zu können, musst du deinen AGC-Discord-Account mit deinem Minecraft-Account verknüpfen! Dein Code ist {} und du kannst ihn mit /linkmc <code> verknüpfen!"
+
