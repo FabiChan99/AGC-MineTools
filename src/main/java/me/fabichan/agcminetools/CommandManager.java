@@ -18,10 +18,14 @@ public class CommandManager extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        String name = event.getName();
+        ICommand command = commands.get(event.getName());
 
-        if (commands.containsKey(name)) {
-            commands.get(name).handle(event);
+        if (command != null) {
+            if (!command.hasRequiredPermissions(event)) {
+                event.reply("Du hast nicht die erforderlichen Berechtigungen für diesen Befehl.").setEphemeral(true).queue();
+                return;
+            }
+            command.handle(event);
         }
     }
 }

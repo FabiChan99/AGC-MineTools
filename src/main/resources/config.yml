@@ -5,8 +5,8 @@ bot:
 database:
   host: "localhost"
   port: 5432
-  name: "meineDatenbank"
-  user: "dbUser"
+  database: "meineDatenbank"
+  username: "dbUser"
   password: "dbPasswort"
 settings:
   chatprefix: "&8[&6AGC MineTools&8] &7"

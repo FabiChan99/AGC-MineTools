@@ -1,9 +1,13 @@
 package me.fabichan.agcminetools;
 
+import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
 import me.fabichan.agcminetools.Utils.DatabaseClient;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 public final class Main extends JavaPlugin {
     public JDA jda;
@@ -28,7 +32,7 @@ public final class Main extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        DatabaseClient dbclient = new DatabaseClient(getConfig().getString("database.host"), getConfig().getString("database.port"), getConfig().getString("database.name"), getConfig().getString("database.user"), getConfig().getString("database.password"));
+        DatabaseClient dbclient = new DatabaseClient(getConfig().getString("database.host"), getConfig().getString("database.port"), getConfig().getString("database.database"), getConfig().getString("database.username"), getConfig().getString("database.password"));
         if (dbclient.getConnection() == null) {
             getLogger().severe("Datenbankverbindung konnte nicht hergestellt werden!");
             getServer().getPluginManager().disablePlugin(this);
@@ -37,15 +41,30 @@ public final class Main extends JavaPlugin {
         dbclient.initDatabase();
         CommandManager commandManager = new CommandManager();
         jda.addEventListener(commandManager);
+        Guild guild = null;
+        try{
+            guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));
+        } catch (Exception e) {
+            //
+        }
+            if (guild == null) {
+            getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         for (ICommand command : commandManager.getCommands()) {
             getLogger().info(String.format("Slash-Command %s wird registriert!", command.getName()));
-            jda.upsertCommand(command.getCommandData()).queue();
+            guild.upsertCommand(command.getCommandData()).queue();
             getLogger().info(String.format("Slash-Command %s wurde registriert!", command.getName()));
         }
+        registerMinecraftEvents();
 
 
     }
 
+    private void registerMinecraftEvents() {
+        getServer().getPluginManager().registerEvents(new MinecraftPlayerJoinListener(this), this);
+    }
 
     @Override
     public void onDisable() {
@@ -53,5 +72,6 @@ public final class Main extends JavaPlugin {
         if (jda != null) {
             jda.shutdown();
         }
+        
     }
 }
