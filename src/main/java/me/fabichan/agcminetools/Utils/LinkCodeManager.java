@@ -3,11 +3,11 @@ package me.fabichan.agcminetools.Utils;
 import me.fabichan.agcminetools.Main;
 
 
-public class CodeGenerator {
+public class LinkCodeManager {
     private final Main plugin;
     private DatabaseClient dbclient;
 
-    public CodeGenerator(Main plugin) {
+    public LinkCodeManager(Main plugin) {
         this.plugin = plugin;
         DatabaseClient dbclient = new DatabaseClient(
                 plugin.getConfig().getString("database.host"),

@@ -1,4 +1,4 @@
-package me.fabichan.agcminetools;
+package me.fabichan.agcminetools.Utils.Interfaces;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

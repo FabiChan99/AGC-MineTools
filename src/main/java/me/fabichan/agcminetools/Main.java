@@ -1,7 +1,9 @@
 package me.fabichan.agcminetools;
 
 import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
+import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DatabaseClient;
+import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;

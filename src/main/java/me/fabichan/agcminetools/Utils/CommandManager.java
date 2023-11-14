@@ -1,5 +1,6 @@
-package me.fabichan.agcminetools;
+package me.fabichan.agcminetools.Utils;
 
+import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
