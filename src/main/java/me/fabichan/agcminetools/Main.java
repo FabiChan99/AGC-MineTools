@@ -13,6 +13,8 @@ import java.util.Objects;
 
 public final class Main extends JavaPlugin {
     public JDA jda;
+    
+    public DatabaseClient dbclient;
 
     @Override
     public void onEnable() {
@@ -34,7 +36,7 @@ public final class Main extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        DatabaseClient dbclient = new DatabaseClient(getConfig().getString("database.host"), getConfig().getString("database.port"), getConfig().getString("database.database"), getConfig().getString("database.username"), getConfig().getString("database.password"));
+        dbclient = new DatabaseClient(getConfig().getString("database.host"), getConfig().getString("database.port"), getConfig().getString("database.database"), getConfig().getString("database.username"), getConfig().getString("database.password"));
         if (dbclient.getConnection() == null) {
             getLogger().severe("Datenbankverbindung konnte nicht hergestellt werden!");
             getServer().getPluginManager().disablePlugin(this);
@@ -71,6 +73,12 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("MineTools werden gestoppt...");
+        // close database connection
+        
+        if (dbclient != null) {
+            dbclient.closeConnection();
+        }
+        
         if (jda != null) {
             jda.shutdown();
         }

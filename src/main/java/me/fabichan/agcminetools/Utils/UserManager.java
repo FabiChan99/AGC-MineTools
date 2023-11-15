@@ -3,11 +3,11 @@ package me.fabichan.agcminetools.Utils;
 import me.fabichan.agcminetools.Main;
 
 
-public class LinkCodeManager {
+public class UserManager {
     private final Main plugin;
     private DatabaseClient dbclient;
 
-    public LinkCodeManager(Main plugin) {
+    public UserManager(Main plugin) {
         this.plugin = plugin;
         DatabaseClient dbclient = new DatabaseClient(
                 plugin.getConfig().getString("database.host"),
@@ -18,7 +18,7 @@ public class LinkCodeManager {
         );
     }
 
-    public String generate() {
+    public String generateLinkCode() {
 
         String code = "";
         for (int i = 0; i < 8; i++) {
@@ -28,7 +28,7 @@ public class LinkCodeManager {
         try {
             if (dbclient.getConnection() != null) {
                 if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM `linkcodes` WHERE `linkcode` = '" + code + "'").first()) {
-                    return generate();
+                    return generateLinkCode();
                 }
             }
         } catch (Exception e) {
