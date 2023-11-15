@@ -19,7 +19,7 @@ public class MinecraftPlayerJoinListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                event.getPlayer().sendMessage("Test");
+                // TODO: Implement this
             }
         }.runTaskAsynchronously(plugin);
     }    

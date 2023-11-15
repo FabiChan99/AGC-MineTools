@@ -1,5 +1,6 @@
 package me.fabichan.agcminetools;
 
+import me.fabichan.agcminetools.Eventlistener.DiscordBanListener;
 import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DatabaseClient;
@@ -27,7 +28,7 @@ public final class Main extends JavaPlugin {
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
-            jda = JDABuilder.createDefault(botToken).build();
+            jda = JDABuilder.createDefault(botToken).addEventListeners(new DiscordBanListener(this)).build();
             jda.awaitReady();
             getLogger().info(String.format("Bot %s ist online!", jda.getSelfUser().getName()));
         } catch (Exception e) {
