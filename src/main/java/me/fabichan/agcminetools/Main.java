@@ -10,12 +10,23 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public final class Main extends JavaPlugin {
-    public JDA jda;
+    public static JDA jda;
     
     public DatabaseClient dbclient;
+    
+    public Main() throws SQLException {
+        dbclient = DatabaseClient.getInstance(
+                this.getConfig().getString("database.host"),
+                this.getConfig().getString("database.port"),
+                this.getConfig().getString("database.database"),
+                this.getConfig().getString("database.username"),
+                this.getConfig().getString("database.password")
+        );
+    }
 
     @Override
     public void onEnable() {
@@ -37,7 +48,6 @@ public final class Main extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        dbclient = new DatabaseClient(getConfig().getString("database.host"), getConfig().getString("database.port"), getConfig().getString("database.database"), getConfig().getString("database.username"), getConfig().getString("database.password"));
         if (dbclient.getConnection() == null) {
             getLogger().severe("Datenbankverbindung konnte nicht hergestellt werden!");
             getServer().getPluginManager().disablePlugin(this);
@@ -65,6 +75,10 @@ public final class Main extends JavaPlugin {
         registerMinecraftEvents();
 
 
+    }
+    
+    public static JDA getJDA() {
+        return jda;
     }
 
     private void registerMinecraftEvents() {
