@@ -14,7 +14,7 @@ public class LinkManager {
     }
 
     private static void deleteExpiredCodes(UUID minecraftUuid) {
-        try (Connection conn = dbclient.getConnection();
+        try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("DELETE FROM linkcodes WHERE uuid = ? AND expires_at <= CURRENT_TIMESTAMP")) {
 
             pstmt.setString(1, minecraftUuid.toString());
@@ -38,7 +38,7 @@ public class LinkManager {
         for (int i = 0; i < 8; i++) {
             code += (int) (Math.random() * 10);
         }
-        
+
         long expiresAt = System.currentTimeMillis() + 600000; // 600000 Millisekunden = 10 Minuten
         executeUpdate("INSERT INTO linkcodes (uuid, linkcode, expires_at) VALUES (?, ?, ?)", minecraftUuid.toString(), code, new Timestamp(expiresAt));
 
@@ -47,7 +47,7 @@ public class LinkManager {
 
 
     private static String checkForExistingCode(UUID minecraftUuid) {
-        try (Connection conn = dbclient.getConnection();
+        try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("SELECT linkcode FROM linkcodes WHERE uuid = ? AND expires_at > CURRENT_TIMESTAMP")) {
 
             pstmt.setString(1, minecraftUuid.toString());
@@ -61,8 +61,6 @@ public class LinkManager {
         }
         return null;
     }
-
-
 
 
     public static boolean isLinked(long discordId) {
@@ -98,7 +96,7 @@ public class LinkManager {
     }
 
     private static boolean checkIfExists(String query, Object... params) {
-        try (Connection conn = dbclient.getConnection();
+        try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             setParameters(pstmt, params);
@@ -113,7 +111,7 @@ public class LinkManager {
     }
 
     private static void executeUpdate(String query, Object... params) {
-        try (Connection conn = dbclient.getConnection();
+        try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             setParameters(pstmt, params);
@@ -124,7 +122,7 @@ public class LinkManager {
     }
 
     private static Object executeQuery(String query, String columnName, Object... params) {
-        try (Connection conn = dbclient.getConnection();
+        try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             setParameters(pstmt, params);
@@ -145,5 +143,5 @@ public class LinkManager {
             pstmt.setObject(i + 1, params[i]);
         }
     }
-    
+
 }

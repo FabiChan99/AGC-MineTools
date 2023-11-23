@@ -6,22 +6,25 @@ import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
+import me.fabichan.agcminetools.Utils.JDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import me.fabichan.agcminetools.Utils.JDAProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
 import java.util.Objects;
 
 public final class Main extends JavaPlugin {
     public static JDA jda;
-    
+
     public DbUtil dbclient;
-    
+
     public Main() {
         dbclient = DbUtil.getInstance(this);
+    }
+
+    public static JDA getJDA() {
+        return jda;
     }
 
     @Override
@@ -50,18 +53,18 @@ public final class Main extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        dbclient.initDatabase();
+        DbUtil.initDatabase();
         CommandManager commandManager = new CommandManager();
         jda.addEventListener(commandManager);
         ICommand SendButtonCommand = new SendRegisterModal(this);
         commandManager.addCommand(SendButtonCommand);
         Guild guild = null;
-        try{
+        try {
             guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));
         } catch (Exception e) {
             //
         }
-            if (guild == null) {
+        if (guild == null) {
             getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -75,10 +78,6 @@ public final class Main extends JavaPlugin {
 
 
     }
-    
-    public static JDA getJDA() {
-        return jda;
-    }
 
     private void registerMinecraftEvents() {
         getServer().getPluginManager().registerEvents(new MinecraftPlayerJoinListener(this), this);
@@ -88,14 +87,14 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         getLogger().info("MineTools werden gestoppt...");
         // close database connection
-        
+
         if (dbclient != null) {
-            dbclient.closeConnection();
+            DbUtil.closeConnection();
         }
-        
+
         if (jda != null) {
             jda.shutdown();
         }
-        
+
     }
 }

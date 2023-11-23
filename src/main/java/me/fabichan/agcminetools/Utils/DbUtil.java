@@ -1,8 +1,5 @@
 package me.fabichan.agcminetools.Utils;
 
-import me.fabichan.agcminetools.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -19,23 +16,6 @@ public class DbUtil {
     private DbUtil(JavaPlugin plugin) {
         javaPlugin = plugin;
         connectToDatabase();
-    }
-
-    private void connectToDatabase() {
-        try {
-            // import driver postgresql
-            Class.forName("org.postgresql.Driver");
-
-            String username = javaPlugin.getConfig().getString("database.username");
-            String password = javaPlugin.getConfig().getString("database.password");
-            String host = javaPlugin.getConfig().getString("database.host");
-            String port = javaPlugin.getConfig().getString("database.port");
-            String database = javaPlugin.getConfig().getString("database.database");
-            String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
-            this.connection = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public static synchronized DbUtil getInstance(JavaPlugin plugin) {
@@ -77,6 +57,23 @@ public class DbUtil {
                 connection.close();
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void connectToDatabase() {
+        try {
+            // import driver postgresql
+            Class.forName("org.postgresql.Driver");
+
+            String username = javaPlugin.getConfig().getString("database.username");
+            String password = javaPlugin.getConfig().getString("database.password");
+            String host = javaPlugin.getConfig().getString("database.host");
+            String port = javaPlugin.getConfig().getString("database.port");
+            String database = javaPlugin.getConfig().getString("database.database");
+            String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
