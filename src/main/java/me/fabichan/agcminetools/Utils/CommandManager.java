@@ -13,7 +13,7 @@ public class CommandManager extends ListenerAdapter {
         return Collections.unmodifiableSet(new HashSet<>(commands.values()));
     }
 
-    private void addCommand(ICommand command) {
+    public void addCommand(ICommand command) {
         commands.put(command.getName(), command);
     }
 
