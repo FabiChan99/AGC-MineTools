@@ -3,11 +3,12 @@ package me.fabichan.agcminetools;
 import me.fabichan.agcminetools.Eventlistener.DiscordBanListener;
 import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
 import me.fabichan.agcminetools.Utils.CommandManager;
-import me.fabichan.agcminetools.Utils.DatabaseClient;
+import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import me.fabichan.agcminetools.Utils.JDAProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -16,16 +17,10 @@ import java.util.Objects;
 public final class Main extends JavaPlugin {
     public static JDA jda;
     
-    public DatabaseClient dbclient;
+    public DbUtil dbclient;
     
-    public Main() throws SQLException {
-        dbclient = DatabaseClient.getInstance(
-                this.getConfig().getString("database.host"),
-                this.getConfig().getString("database.port"),
-                this.getConfig().getString("database.database"),
-                this.getConfig().getString("database.username"),
-                this.getConfig().getString("database.password")
-        );
+    public Main() {
+        dbclient = DbUtil.getInstance(this);
     }
 
     @Override
@@ -41,6 +36,7 @@ public final class Main extends JavaPlugin {
             }
             jda = JDABuilder.createDefault(botToken).addEventListeners(new DiscordBanListener(this)).build();
             jda.awaitReady();
+            JDAProvider.initialize(jda);
             getLogger().info(String.format("Bot %s ist online!", jda.getSelfUser().getName()));
         } catch (Exception e) {
             getLogger().severe(String.format("Bot konnte nicht gestartet werden: %s", e.getMessage()));
@@ -48,7 +44,7 @@ public final class Main extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        if (dbclient.getConnection() == null) {
+        if (dbclient == null) {
             getLogger().severe("Datenbankverbindung konnte nicht hergestellt werden!");
             getServer().getPluginManager().disablePlugin(this);
             return;

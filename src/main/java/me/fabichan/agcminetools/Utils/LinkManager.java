@@ -1,148 +1,149 @@
 package me.fabichan.agcminetools.Utils;
 
-import kotlin.reflect.TypeOfKt;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.Console;
-import java.lang.reflect.Type;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.UUID;
 
-
 public class LinkManager {
-    static DatabaseClient dbclient;
-    static JavaPlugin JavaPlugin;
-    
-    public LinkManager(JavaPlugin plugin) throws SQLException {
-        JavaPlugin = plugin;
-        dbclient = DatabaseClient.getInstance(
-                plugin.getConfig().getString("database.host"),
-                plugin.getConfig().getString("database.port"),
-                plugin.getConfig().getString("database.database"),
-                plugin.getConfig().getString("database.username"),
-                plugin.getConfig().getString("database.password")
-        );
-        // print dbclient
-        System.out.println(dbclient);
-        
+    private static DbUtil dbclient;
+
+    public LinkManager(JavaPlugin plugin) {
+        dbclient = DbUtil.getInstance(plugin);
         System.out.println("LinkManager wurde initialisiert!");
     }
-    public static String generateLinkCode() {
+
+    private static void deleteExpiredCodes(UUID minecraftUuid) {
+        try (Connection conn = dbclient.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM linkcodes WHERE uuid = ? AND expires_at <= CURRENT_TIMESTAMP")) {
+
+            pstmt.setString(1, minecraftUuid.toString());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static String generateLinkCode(UUID minecraftUuid) {
+        // Überprüfe zuerst, ob ein gültiger Code existiert
+        String existingCode = checkForExistingCode(minecraftUuid);
+        if (existingCode != null) {
+            return existingCode;
+        }
+
+        deleteExpiredCodes(minecraftUuid);
 
         String code = "";
         for (int i = 0; i < 8; i++) {
             code += (int) (Math.random() * 10);
         }
+        
+        long expiresAt = System.currentTimeMillis() + 600000; // 600000 Millisekunden = 10 Minuten
+        executeUpdate("INSERT INTO linkcodes (uuid, linkcode, expires_at) VALUES (?, ?, ?)", minecraftUuid.toString(), code, new Timestamp(expiresAt));
 
-        try {
-            if (dbclient.getConnection() != null) {
-                if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM `linkcodes` WHERE `linkcode` = '" + code + "'").first()) {
-                    return generateLinkCode();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return code;
     }
-    
-    
+
+
+    private static String checkForExistingCode(UUID minecraftUuid) {
+        try (Connection conn = dbclient.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement("SELECT linkcode FROM linkcodes WHERE uuid = ? AND expires_at > CURRENT_TIMESTAMP")) {
+
+            pstmt.setString(1, minecraftUuid.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("linkcode");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
     public static boolean isLinked(long discordId) {
-        try {
-            if (dbclient.getConnection() != null) {
-                if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'userid' = '" + discordId + "'").first()) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return checkIfExists("SELECT * FROM mcusers WHERE userid = ?", discordId);
     }
-    
+
     public static boolean isLinked(UUID minecraftUuid) {
-        try {
-            if (dbclient.getConnection() != null) {
-                if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'uuid' = '" + minecraftUuid + "'").first()) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return checkIfExists("SELECT * FROM mcusers WHERE uuid = ?", minecraftUuid.toString());
     }
-    
-    public static void LinkAccounts(long discordId, UUID minecraftUuid) {
-        try {
-            if (dbclient.getConnection() != null) {
-                dbclient.getConnection().createStatement().executeUpdate("INSERT INTO 'mcusers' ('uuid', 'userid') VALUES ('" + minecraftUuid + "', '" + discordId + "')");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    public static void linkAccounts(long discordId, UUID minecraftUuid) {
+        executeUpdate("INSERT INTO mcusers (uuid, userid) VALUES (?, ?)", minecraftUuid.toString(), discordId);
     }
-    
-    public static void UnlinkAccounts(long discordId){
-        
+
+    public static void unlinkAccounts(long discordId) {
+        executeUpdate("DELETE FROM mcusers WHERE userid = ?", discordId);
     }
-    
-    public static void UnlinkAccounts(UUID minecraftUuid){
+
+    public static void unlinkAccounts(UUID minecraftUuid) {
+        executeUpdate("DELETE FROM mcusers WHERE uuid = ?", minecraftUuid.toString());
     }
-    
+
     public static UUID getMinecraftUuid(long discordId) {
-        try {
-            if (dbclient.getConnection() != null) {
-                if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'userid' = '" + discordId + "'").first()) {
-                    return UUID.fromString(dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'userid' = '" + discordId + "'").getString("uuid"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (UUID) executeQuery("SELECT uuid FROM mcusers WHERE userid = ?", "uuid", discordId);
     }
-    
+
     public static long getDiscordId(UUID minecraftUuid) {
-        try {
-            if (dbclient.getConnection() != null) {
-                if (dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'uuid' = '" + minecraftUuid + "'").first()) {
-                    return dbclient.getConnection().createStatement().executeQuery("SELECT * FROM 'mcusers' WHERE 'uuid' = '" + minecraftUuid + "'").getLong("userid");
-                }
+        return (long) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
+    }
+
+    public static String getLinkCode(UUID minecraftUuid) {
+        return (String) executeQuery("SELECT linkcode FROM linkcodes WHERE uuid = ?", "linkcode", minecraftUuid.toString());
+    }
+
+    private static boolean checkIfExists(String query, Object... params) {
+        try (Connection conn = dbclient.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+
+            setParameters(pstmt, params);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.first();
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void executeUpdate(String query, Object... params) {
+        try (Connection conn = dbclient.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            setParameters(pstmt, params);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
     }
-    public static String getLinkCode(UUID minecraftUuid) {
-        try {
-            if (dbclient.getConnection() != null) {
-                Statement statement = dbclient.getConnection().createStatement();
 
-                String query = "SELECT linkcode, expires_at FROM linkcodes WHERE uuid = '" + minecraftUuid.toString() + "'";
-                ResultSet resultSet = statement.executeQuery(query);
+    private static Object executeQuery(String query, String columnName, Object... params) {
+        try (Connection conn = dbclient.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
-                if (resultSet.first()) {
-                    String linkcode = resultSet.getString("linkcode");
-                    Timestamp expiresAt = resultSet.getTimestamp("expires_at");
-                    
-                    long tenMinutesAgo = System.currentTimeMillis() - 600000; 
-                    if (expiresAt.getTime() > tenMinutesAgo) {
-                        return linkcode;
-                    }
+            setParameters(pstmt, params);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.first()) {
+                    return rs.getObject(columnName);
                 }
-                
-                return generateLinkCode();
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            pstmt.setObject(i + 1, params[i]);
+        }
     }
     
 }
