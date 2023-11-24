@@ -2,10 +2,7 @@ package me.fabichan.agcminetools.Utils;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DbUtil {
 
@@ -77,4 +74,39 @@ public class DbUtil {
             e.printStackTrace();
         }
     }
+
+    public static void executeUpdate(String query, Object... params) {
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            setParameters(pstmt, params);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object executeQuery(String query, String columnName, Object... params) {
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+
+            setParameters(pstmt, params);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.first()) {
+                    return rs.getObject(columnName);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            pstmt.setObject(i + 1, params[i]);
+        }
+    }
+    
 }

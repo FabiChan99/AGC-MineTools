@@ -2,6 +2,7 @@ package me.fabichan.agcminetools;
 
 import me.fabichan.agcminetools.Commands.Discord.SendRegisterModal;
 import me.fabichan.agcminetools.Eventlistener.AccountLinkButtonClick;
+import me.fabichan.agcminetools.Eventlistener.AccountLinkSubmitModalEvent;
 import me.fabichan.agcminetools.Eventlistener.DiscordBanListener;
 import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
 import me.fabichan.agcminetools.Utils.CommandManager;
@@ -41,7 +42,6 @@ public final class Main extends JavaPlugin {
             }
             jda = JDABuilder.createDefault(botToken).addEventListeners(new DiscordBanListener(this)).build();
             jda.awaitReady();
-            jda.addEventListener(new AccountLinkButtonClick(this));
             JDAProvider.initialize(jda);
             getLogger().info(String.format("Bot %s ist online!", jda.getSelfUser().getName()));
         } catch (Exception e) {
@@ -58,6 +58,8 @@ public final class Main extends JavaPlugin {
         DbUtil.initDatabase();
         CommandManager commandManager = new CommandManager();
         jda.addEventListener(commandManager);
+        jda.addEventListener(new AccountLinkButtonClick(this));
+        jda.addEventListener(new AccountLinkSubmitModalEvent(this));
         ICommand SendButtonCommand = new SendRegisterModal(this);
         commandManager.addCommand(SendButtonCommand);
         Guild guild = null;
