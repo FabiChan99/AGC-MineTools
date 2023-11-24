@@ -91,8 +91,8 @@ public class LinkManager {
     }
 
     public static void linkAccounts(long discordId, UUID minecraftUuid) {
-        executeUpdate("INSERT INTO mcusers (uuid, userid, linked_at) VALUES (?, ?, CURRENT_TIMESTAMP)", minecraftUuid, discordId);
-        executeUpdate("DELETE FROM linkcodes WHERE uuid = ?", minecraftUuid);
+        executeUpdate("INSERT INTO mcusers (uuid, userid, linked_at) VALUES (?, ?, CURRENT_TIMESTAMP)", minecraftUuid.toString(), discordId);
+        executeUpdate("DELETE FROM linkcodes WHERE uuid = ?", minecraftUuid.toString());
     }
     
     public static boolean isLinkCodeValid(String linkCode) {
@@ -103,8 +103,8 @@ public class LinkManager {
         executeUpdate("DELETE FROM mcusers WHERE userid = ?", discordId);
     }
 
-    public static void unlinkAccounts(String minecraftUuid) {
-        executeUpdate("DELETE FROM mcusers WHERE uuid = ?", minecraftUuid);
+    public static void unlinkAccounts(UUID minecraftUuid) {
+        executeUpdate("DELETE FROM mcusers WHERE uuid = ?", minecraftUuid.toString());
     }
 
     public static UUID getMinecraftUuid(long discordId) {
@@ -127,8 +127,8 @@ public class LinkManager {
         }
     }
 
-    public static long getDiscordId(String minecraftUuid) {
-        return (long) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid);
+    public static long getDiscordId(UUID minecraftUuid) {
+        return (long) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
     }
 
     public static String getLinkCode(String minecraftUuid) {
