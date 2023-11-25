@@ -1,10 +1,7 @@
 package me.fabichan.agcminetools;
 
 import me.fabichan.agcminetools.Commands.Discord.SendRegisterModal;
-import me.fabichan.agcminetools.Eventlistener.AccountLinkButtonClick;
-import me.fabichan.agcminetools.Eventlistener.AccountLinkSubmitModalEvent;
-import me.fabichan.agcminetools.Eventlistener.DiscordBanListener;
-import me.fabichan.agcminetools.Eventlistener.MinecraftPlayerJoinListener;
+import me.fabichan.agcminetools.Eventlistener.*;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
@@ -70,7 +67,8 @@ public final class Main extends JavaPlugin {
             jda.addEventListener(
                     new AccountLinkSubmitModalEvent(this),
                     new AccountLinkButtonClick(this),
-                    new DiscordBanListener(this)
+                    new DiscordBanListener(this),
+                    new DiscordMemberRemoveListener(this)
             );
         } catch (SQLException ignored) {
         }

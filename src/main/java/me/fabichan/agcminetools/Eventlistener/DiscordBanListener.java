@@ -4,6 +4,7 @@ import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.LinkManager;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -29,7 +30,8 @@ public class DiscordBanListener extends ListenerAdapter {
         if (minecraftUuid != null) {
             // check if player is online
             if (plugin.getServer().getPlayer(minecraftUuid) != null) {
-                Objects.requireNonNull(plugin.getServer().getPlayer(minecraftUuid)).kickPlayer("Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.");
+                String kickmsg = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";
+                Bukkit.getScheduler().runTask(plugin, () -> Objects.requireNonNull(plugin.getServer().getPlayer(minecraftUuid)).kickPlayer(kickmsg));
             }
         }
     }
