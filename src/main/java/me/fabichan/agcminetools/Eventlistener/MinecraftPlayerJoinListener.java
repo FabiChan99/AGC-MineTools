@@ -4,6 +4,7 @@ import me.fabichan.agcminetools.Utils.JDAProvider;
 import me.fabichan.agcminetools.Utils.LinkManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -54,11 +55,30 @@ public class MinecraftPlayerJoinListener implements Listener {
                     }
 
                     String linkChannelName = linkChannel.getName();
-                    String kickMessage = "Bitte verbinde deinen Discord-Account mit dem Minecraft-Account!\n\nKlicke dazu in " + linkChannelName + " den Button \"Verlinken\" und gebe dort den Code " + linkCode + "` ein. Der Code ist 10 Minuten ab der Erstellung gültig.";
-
-                    // Verschiebe das Kicken des Spielers auf den Hauptthread
+                    String kickMessage = "Bitte verbinde deinen Discord-Account mit dem Minecraft-Account!\n\nKlicke dazu in " + linkChannelName + " den Button \"Verlinken\" und gebe dort den Code " + linkCode + " ein. Der Code ist 10 Minuten ab der Erstellung gültig.";
                     Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(kickMessage));
                 }
+                else if (LinkManager.isLinked(playerUuid)){
+                    Guild guild = jda.getGuildById(plugin.getConfig().getString("bot.guildid"));
+                    if (guild == null) {
+                        plugin.getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
+                        return;
+                    }
+                    long discordId = LinkManager.getDiscordId(playerUuid);
+                    User user = jda.getUserById(discordId);
+                    if (guild.retrieveBan(user).complete() != null) {
+                        String KickMessage = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";
+                        Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
+                        return;
+                    }
+                    if (!guild.isMember(user)) {
+                        String KickMessage = "Du bist nicht auf unserem Discord-Server! Bitte joine unserem Discord-Server, um auf dem Minecraft-Server spielen zu können.";
+                        Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
+                        return;
+                    }
+                }
+                    
+                
             }
         }.runTaskAsynchronously(plugin);
     }
