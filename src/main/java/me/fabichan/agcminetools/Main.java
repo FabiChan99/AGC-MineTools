@@ -12,8 +12,11 @@ import me.fabichan.agcminetools.Utils.JDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public final class Main extends JavaPlugin {
@@ -40,7 +43,10 @@ public final class Main extends JavaPlugin {
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
-            jda = JDABuilder.createDefault(botToken).addEventListeners(new DiscordBanListener(this)).build();
+            jda = JDABuilder.createDefault(botToken)
+                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .build();
             jda.awaitReady();
             JDAProvider.initialize(jda);
             getLogger().info(String.format("Bot %s ist online!", jda.getSelfUser().getName()));
@@ -58,8 +64,13 @@ public final class Main extends JavaPlugin {
         DbUtil.initDatabase();
         CommandManager commandManager = new CommandManager();
         jda.addEventListener(commandManager);
-        jda.addEventListener(new AccountLinkButtonClick(this));
-        jda.addEventListener(new AccountLinkSubmitModalEvent(this));
+        try {
+        jda.addEventListener(
+                new AccountLinkSubmitModalEvent(this),
+                new AccountLinkButtonClick(this), 
+                new DiscordBanListener(this)
+        );
+        } catch (SQLException ignored){}
         ICommand SendButtonCommand = new SendRegisterModal(this);
         commandManager.addCommand(SendButtonCommand);
         Guild guild = null;

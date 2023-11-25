@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class MinecraftPlayerJoinListener implements Listener {
@@ -32,12 +33,10 @@ public class MinecraftPlayerJoinListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                // Überprüfung, ob jda null ist
                 if (jda == null) {
                     plugin.getLogger().severe("JDA ist nicht initialisiert!");
                     return;
                 }
-
                 Player player = event.getPlayer();
                 UUID playerUuid = player.getUniqueId();
                 if (!LinkManager.isLinked(playerUuid)) {
@@ -59,26 +58,28 @@ public class MinecraftPlayerJoinListener implements Listener {
                     Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(kickMessage));
                 }
                 else if (LinkManager.isLinked(playerUuid)){
-                    Guild guild = jda.getGuildById(plugin.getConfig().getString("bot.guildid"));
+                    Guild guild = jda.getGuildById(Objects.requireNonNull(plugin.getConfig().getString("bot.guildid")));
                     if (guild == null) {
                         plugin.getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
                         return;
                     }
                     long discordId = LinkManager.getDiscordId(playerUuid);
-                    User user = jda.getUserById(discordId);
-                    if (guild.retrieveBan(user).complete() != null) {
-                        String KickMessage = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";
-                        Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
-                        return;
+                    User user = jda.retrieveUserById(discordId).complete();  
+                    try{
+                        if (guild.retrieveBan(user).complete() != null) {
+                            String KickMessage = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";
+                            Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
+                            return;
+                        }
                     }
+                    catch (Exception ignored) {}
+                    
                     if (!guild.isMember(user)) {
                         String KickMessage = "Du bist nicht auf unserem Discord-Server! Bitte joine unserem Discord-Server, um auf dem Minecraft-Server spielen zu können.";
                         Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
                         return;
                     }
                 }
-                    
-                
             }
         }.runTaskAsynchronously(plugin);
     }
