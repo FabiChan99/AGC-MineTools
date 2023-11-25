@@ -1,8 +1,11 @@
 package me.fabichan.agcminetools.Utils;
 
+import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import static me.fabichan.agcminetools.Utils.DbUtil.*;
@@ -26,6 +29,19 @@ public class LinkManager {
 
         }
     }
+    
+    public static String getLinkDate(UUID mcuuid) {
+        Object result = executeQuery("SELECT linked_at FROM mcusers WHERE uuid = ?", "linked_at", mcuuid.toString());
+        if (result instanceof Timestamp) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return dateFormat.format((Timestamp) result);
+        } else if (result instanceof String) {
+            return (String) result;
+        } else {
+            return "Unknown Date";
+        }
+    }
+
 
     public static boolean isPending(String linkCode) {
         return checkIfExists("SELECT * FROM linkcodes WHERE linkcode = ? AND expires_at > CURRENT_TIMESTAMP", linkCode);

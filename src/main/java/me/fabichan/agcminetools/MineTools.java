@@ -1,6 +1,7 @@
 package me.fabichan.agcminetools;
 
 import me.fabichan.agcminetools.Commands.Discord.SendRegisterModal;
+import me.fabichan.agcminetools.Commands.Discord.UserLookup;
 import me.fabichan.agcminetools.Eventlistener.*;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DbUtil;
@@ -9,6 +10,7 @@ import me.fabichan.agcminetools.Utils.JDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -17,19 +19,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public final class Main extends JavaPlugin {
+public final class MineTools extends JavaPlugin {
     public static JDA jda;
 
     public DbUtil dbclient;
 
-    public Main() {
+    public MineTools() {
         dbclient = DbUtil.getInstance(this);
     }
-
-    public static JDA getJDA() {
-        return jda;
-    }
-
+    
     @Override
     public void onEnable() {
         getLogger().info("MineTools werden gestartet...");
@@ -73,7 +71,9 @@ public final class Main extends JavaPlugin {
         } catch (SQLException ignored) {
         }
         ICommand SendButtonCommand = new SendRegisterModal(this);
+        ICommand UserLookupCommand = new UserLookup(this);
         commandManager.addCommand(SendButtonCommand);
+        commandManager.addCommand(UserLookupCommand);
         Guild guild = null;
         try {
             guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));
