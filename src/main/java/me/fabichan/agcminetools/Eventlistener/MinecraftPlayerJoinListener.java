@@ -41,20 +41,20 @@ public class MinecraftPlayerJoinListener implements Listener {
                 UUID playerUuid = player.getUniqueId();
                 if (!LinkManager.isLinked(playerUuid)) {
                     String linkCode = LinkManager.generateLinkCode(playerUuid);
-                    Guild guild = jda.getGuildById(plugin.getConfig().getString("bot.guildid"));
+                    Guild guild = jda.getGuildById(Objects.requireNonNull(plugin.getConfig().getString("bot.guildid")));
                     if (guild == null) {
                         plugin.getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
                         return;
                     }
 
-                    Channel linkChannel = guild.getTextChannelById(plugin.getConfig().getString("bot.registerchannelid"));
+                    Channel linkChannel = guild.getTextChannelById(Objects.requireNonNull(plugin.getConfig().getString("bot.registerchannelid")));
                     if (linkChannel == null) {
                         plugin.getLogger().severe("LinkChannel ist nicht gesetzt oder existiert nicht auf dem Server!");
                         return;
                     }
 
                     String linkChannelName = linkChannel.getName();
-                    String kickMessage = "Bitte verbinde deinen Discord-Account mit dem Minecraft-Account!\n\nKlicke dazu in " + linkChannelName + " den Button \"Verlinken\" und gebe dort den Code " + linkCode + " ein. Der Code ist 10 Minuten ab der Erstellung gültig.";
+                    String kickMessage = "Bitte verbinde deinen Discord-Account mit dem Minecraft-Account! \n\nKlicke dazu in " + linkChannelName + " den Button \"Verlinken\" und gebe dort den Code " + linkCode + " ein. Der Code ist 10 Minuten ab der Erstellung gültig.";
                     Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(kickMessage));
                 } else if (LinkManager.isLinked(playerUuid)) {
                     Guild guild = jda.getGuildById(Objects.requireNonNull(plugin.getConfig().getString("bot.guildid")));

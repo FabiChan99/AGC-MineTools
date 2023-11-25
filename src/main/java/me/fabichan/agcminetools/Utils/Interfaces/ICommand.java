@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface ICommand {
     String getName();
@@ -21,6 +22,6 @@ public interface ICommand {
         if (getRequiredPermissions().isEmpty()) {
             return true;
         }
-        return event.getMember().hasPermission(getRequiredPermissions());
+        return Objects.requireNonNull(event.getMember()).hasPermission(getRequiredPermissions());
     }
 }
