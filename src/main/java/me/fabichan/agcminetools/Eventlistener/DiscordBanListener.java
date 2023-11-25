@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -26,7 +27,10 @@ public class DiscordBanListener extends ListenerAdapter {
         long discordId = event.getUser().getIdLong();
         UUID minecraftUuid = LinkManager.getMinecraftUuid(discordId);
         if (minecraftUuid != null) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "kick " + minecraftUuid + " Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.");
+            // check if player is online
+            if (plugin.getServer().getPlayer(minecraftUuid) != null) {
+                Objects.requireNonNull(plugin.getServer().getPlayer(minecraftUuid)).kickPlayer("Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.");
+            }
         }
     }
 
