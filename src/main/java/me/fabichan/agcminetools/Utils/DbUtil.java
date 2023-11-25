@@ -58,23 +58,6 @@ public class DbUtil {
         }
     }
 
-    private void connectToDatabase() {
-        try {
-            // import driver postgresql
-            Class.forName("org.postgresql.Driver");
-
-            String username = javaPlugin.getConfig().getString("database.username");
-            String password = javaPlugin.getConfig().getString("database.password");
-            String host = javaPlugin.getConfig().getString("database.host");
-            String port = javaPlugin.getConfig().getString("database.port");
-            String database = javaPlugin.getConfig().getString("database.database");
-            String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void executeUpdate(String query, Object... params) {
         try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -108,5 +91,22 @@ public class DbUtil {
             pstmt.setObject(i + 1, params[i]);
         }
     }
-    
+
+    private void connectToDatabase() {
+        try {
+            // import driver postgresql
+            Class.forName("org.postgresql.Driver");
+
+            String username = javaPlugin.getConfig().getString("database.username");
+            String password = javaPlugin.getConfig().getString("database.password");
+            String host = javaPlugin.getConfig().getString("database.host");
+            String port = javaPlugin.getConfig().getString("database.port");
+            String database = javaPlugin.getConfig().getString("database.database");
+            String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

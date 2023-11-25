@@ -9,7 +9,7 @@ import java.util.UUID;
 public class McUtil {
     private static DbUtil dbclient;
     private static JavaPlugin BukkitPlugin;
-    
+
     public McUtil(JavaPlugin plugin) {
         dbclient = DbUtil.getInstance(plugin);
         BukkitPlugin = plugin;

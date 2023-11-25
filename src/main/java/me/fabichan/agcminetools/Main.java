@@ -65,12 +65,13 @@ public final class Main extends JavaPlugin {
         CommandManager commandManager = new CommandManager();
         jda.addEventListener(commandManager);
         try {
-        jda.addEventListener(
-                new AccountLinkSubmitModalEvent(this),
-                new AccountLinkButtonClick(this), 
-                new DiscordBanListener(this)
-        );
-        } catch (SQLException ignored){}
+            jda.addEventListener(
+                    new AccountLinkSubmitModalEvent(this),
+                    new AccountLinkButtonClick(this),
+                    new DiscordBanListener(this)
+            );
+        } catch (SQLException ignored) {
+        }
         ICommand SendButtonCommand = new SendRegisterModal(this);
         commandManager.addCommand(SendButtonCommand);
         Guild guild = null;

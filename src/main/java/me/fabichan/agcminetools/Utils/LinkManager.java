@@ -1,6 +1,5 @@
 package me.fabichan.agcminetools.Utils;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
@@ -24,7 +23,7 @@ public class LinkManager {
             pstmt.setString(1, minecraftUuid.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            
+
         }
     }
 
@@ -61,7 +60,7 @@ public class LinkManager {
 
         return code;
     }
-    
+
     private static String checkForExistingCode(UUID minecraftUuid) {
         try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("SELECT linkcode FROM linkcodes WHERE uuid = ? AND expires_at > CURRENT_TIMESTAMP")) {
@@ -77,14 +76,12 @@ public class LinkManager {
         }
         return null;
     }
-    
-    
 
 
     public static boolean isLinked(long discordId) {
         return checkIfExists("SELECT * FROM mcusers WHERE userid = ?", discordId);
     }
-    
+
 
     public static boolean isLinked(UUID minecraftUuid) {
         return checkIfExists("SELECT * FROM mcusers WHERE uuid = ?", minecraftUuid.toString());
@@ -94,7 +91,7 @@ public class LinkManager {
         executeUpdate("INSERT INTO mcusers (uuid, userid, linked_at) VALUES (?, ?, CURRENT_TIMESTAMP)", minecraftUuid.toString(), discordId);
         executeUpdate("DELETE FROM linkcodes WHERE uuid = ?", minecraftUuid.toString());
     }
-    
+
     public static boolean isLinkCodeValid(String linkCode) {
         return checkIfExists("SELECT * FROM linkcodes WHERE linkcode = ?", linkCode);
     }
@@ -134,7 +131,7 @@ public class LinkManager {
     public static String getLinkCode(String minecraftUuid) {
         return (String) executeQuery("SELECT linkcode FROM linkcodes WHERE uuid = ?", "linkcode", minecraftUuid);
     }
-    
+
     public static String GetUUIDByLinkCode(String linkCode) {
         return (String) executeQuery("SELECT uuid FROM linkcodes WHERE linkcode = ?", "uuid", linkCode);
     }
@@ -153,12 +150,11 @@ public class LinkManager {
             return false;
         }
     }
-    
+
     public static void LinkAndInvalidateCode(long discordId, UUID minecraftUuid, String linkCode) {
         linkAccounts(discordId, minecraftUuid);
         executeUpdate("DELETE FROM linkcodes WHERE linkcode = ?", linkCode);
     }
-
 
 
 }

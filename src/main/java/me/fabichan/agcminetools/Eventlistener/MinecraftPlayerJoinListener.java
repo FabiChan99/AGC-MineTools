@@ -56,28 +56,26 @@ public class MinecraftPlayerJoinListener implements Listener {
                     String linkChannelName = linkChannel.getName();
                     String kickMessage = "Bitte verbinde deinen Discord-Account mit dem Minecraft-Account!\n\nKlicke dazu in " + linkChannelName + " den Button \"Verlinken\" und gebe dort den Code " + linkCode + " ein. Der Code ist 10 Minuten ab der Erstellung gültig.";
                     Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(kickMessage));
-                }
-                else if (LinkManager.isLinked(playerUuid)){
+                } else if (LinkManager.isLinked(playerUuid)) {
                     Guild guild = jda.getGuildById(Objects.requireNonNull(plugin.getConfig().getString("bot.guildid")));
                     if (guild == null) {
                         plugin.getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
                         return;
                     }
                     long discordId = LinkManager.getDiscordId(playerUuid);
-                    User user = jda.retrieveUserById(discordId).complete();  
-                    try{
+                    User user = jda.retrieveUserById(discordId).complete();
+                    try {
                         if (guild.retrieveBan(user).complete() != null) {
                             String KickMessage = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";
                             Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
                             return;
                         }
+                    } catch (Exception ignored) {
                     }
-                    catch (Exception ignored) {}
-                    
+
                     if (!guild.isMember(user)) {
                         String KickMessage = "Du bist nicht auf unserem Discord-Server! Bitte joine unserem Discord-Server, um auf dem Minecraft-Server spielen zu können.";
                         Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
-                        return;
                     }
                 }
             }

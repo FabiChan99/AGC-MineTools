@@ -1,12 +1,10 @@
 package me.fabichan.agcminetools.Eventlistener;
 
 import me.fabichan.agcminetools.Utils.LinkManager;
-import me.fabichan.agcminetools.Utils.McUtil;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.modals.ModalMapping;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,11 +15,11 @@ import static me.fabichan.agcminetools.Utils.McUtil.getNameByUUID;
 public class AccountLinkSubmitModalEvent extends ListenerAdapter {
 
     private final JavaPlugin plugin;
-    
+
     public AccountLinkSubmitModalEvent(JavaPlugin plugin) {
         this.plugin = plugin;
     }
-    
+
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
         if (event.getModalId().equals("linkmodal")) {
@@ -47,8 +45,6 @@ public class AccountLinkSubmitModalEvent extends ListenerAdapter {
 
         }
     }
-    
-    
-    
-    
+
+
 }
