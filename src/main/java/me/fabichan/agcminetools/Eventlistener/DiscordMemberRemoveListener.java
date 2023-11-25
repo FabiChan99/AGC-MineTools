@@ -2,9 +2,9 @@ package me.fabichan.agcminetools.Eventlistener;
 
 import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.LinkManager;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -13,12 +13,12 @@ public class DiscordMemberRemoveListener extends ListenerAdapter {
 
     static DbUtil dbclient;
     private final JavaPlugin plugin;
-    
+
     public DiscordMemberRemoveListener(JavaPlugin plugin) {
         this.plugin = plugin;
         dbclient = DbUtil.getInstance(plugin);
     }
-    
+
     @Override
     public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
         long discordId = event.getUser().getIdLong();
@@ -34,5 +34,5 @@ public class DiscordMemberRemoveListener extends ListenerAdapter {
             }
         }
     }
-    
+
 }

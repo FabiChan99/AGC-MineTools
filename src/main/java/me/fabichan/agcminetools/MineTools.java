@@ -10,7 +10,6 @@ import me.fabichan.agcminetools.Utils.JDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -27,7 +26,7 @@ public final class MineTools extends JavaPlugin {
     public MineTools() {
         dbclient = DbUtil.getInstance(this);
     }
-    
+
     @Override
     public void onEnable() {
         getLogger().info("MineTools werden gestartet...");

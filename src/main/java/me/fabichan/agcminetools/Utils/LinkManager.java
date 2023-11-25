@@ -1,11 +1,9 @@
 package me.fabichan.agcminetools.Utils;
 
-import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import static me.fabichan.agcminetools.Utils.DbUtil.*;
@@ -29,7 +27,7 @@ public class LinkManager {
 
         }
     }
-    
+
     public static String getLinkDate(UUID mcuuid) {
         Object result = executeQuery("SELECT linked_at FROM mcusers WHERE uuid = ?", "linked_at", mcuuid.toString());
         if (result instanceof Timestamp) {
