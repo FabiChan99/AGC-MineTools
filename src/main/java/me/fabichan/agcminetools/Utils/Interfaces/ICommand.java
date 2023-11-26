@@ -16,7 +16,7 @@ public interface ICommand {
 
     CommandData getCommandData();
 
-    List<Permission> getRequiredPermissions();
+    List < Permission > getRequiredPermissions();
 
     default boolean hasRequiredPermissions(SlashCommandInteractionEvent event) {
         if (getRequiredPermissions().isEmpty()) {

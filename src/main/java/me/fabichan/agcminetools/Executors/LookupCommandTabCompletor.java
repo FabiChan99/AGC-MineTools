@@ -11,14 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookupCommandTabCompletor implements TabCompleter{
+public class LookupCommandTabCompletor implements TabCompleter {
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, @NotNull String[] args) {
+    public List < String > onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("lookup")) {
-            List<String> benutzerNamen = new ArrayList<>();
-            List<OfflinePlayer> players = McUtil.getAllPlayersEverPlayedAsOfflinePlayer();
-            for (OfflinePlayer player : players) {
+            List < String > benutzerNamen = new ArrayList < > ();
+            List < OfflinePlayer > players = McUtil.getAllPlayersEverPlayedAsOfflinePlayer();
+            for (OfflinePlayer player: players) {
                 benutzerNamen.add(player.getName());
             }
             return benutzerNamen;

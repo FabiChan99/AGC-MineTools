@@ -18,8 +18,7 @@ public class LinkManager {
     }
 
     private static void deleteExpiredCodes(UUID minecraftUuid) {
-        try (Connection conn = DbUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM linkcodes WHERE uuid = ? AND expires_at <= CURRENT_TIMESTAMP")) {
+        try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement("DELETE FROM linkcodes WHERE uuid = ? AND expires_at <= CURRENT_TIMESTAMP")) {
 
             pstmt.setString(1, minecraftUuid.toString());
             pstmt.executeUpdate();
@@ -40,7 +39,6 @@ public class LinkManager {
         }
     }
 
-
     public static boolean isPending(String linkCode) {
         return checkIfExists("SELECT * FROM linkcodes WHERE linkcode = ? AND expires_at > CURRENT_TIMESTAMP", linkCode);
     }
@@ -54,7 +52,6 @@ public class LinkManager {
         return getUuid(result);
     }
 
-
     public static String generateLinkCode(UUID minecraftUuid) {
         // Überprüfe zuerst, ob ein gültiger Code existiert
         String existingCode = checkForExistingCode(minecraftUuid);
@@ -66,7 +63,7 @@ public class LinkManager {
 
         String code = "";
         for (int i = 0; i < 8; i++) {
-            code += (int) (Math.random() * 10);
+            code += (int)(Math.random() * 10);
         }
 
         long expiresAt = System.currentTimeMillis() + 600000; // 600000 Millisekunden = 10 Minuten
@@ -76,8 +73,7 @@ public class LinkManager {
     }
 
     private static String checkForExistingCode(UUID minecraftUuid) {
-        try (Connection conn = DbUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement("SELECT linkcode FROM linkcodes WHERE uuid = ? AND expires_at > CURRENT_TIMESTAMP")) {
+        try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement("SELECT linkcode FROM linkcodes WHERE uuid = ? AND expires_at > CURRENT_TIMESTAMP")) {
 
             pstmt.setString(1, minecraftUuid.toString());
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -91,11 +87,9 @@ public class LinkManager {
         return null;
     }
 
-
     public static boolean isLinked(long discordId) {
         return checkIfExists("SELECT * FROM mcusers WHERE userid = ?", discordId);
     }
-
 
     public static boolean isLinked(UUID minecraftUuid) {
         return checkIfExists("SELECT * FROM mcusers WHERE uuid = ?", minecraftUuid.toString());
@@ -149,7 +143,6 @@ public class LinkManager {
         }
     }
 
-
     public static String getLinkCode(String minecraftUuid) {
         return (String) executeQuery("SELECT linkcode FROM linkcodes WHERE uuid = ?", "linkcode", minecraftUuid);
     }
@@ -158,9 +151,8 @@ public class LinkManager {
         return (String) executeQuery("SELECT uuid FROM linkcodes WHERE linkcode = ?", "uuid", linkCode);
     }
 
-    private static boolean checkIfExists(String query, Object... params) {
-        try (Connection conn = DbUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+    private static boolean checkIfExists(String query, Object...params) {
+        try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             setParameters(pstmt, params);
 
@@ -177,6 +169,5 @@ public class LinkManager {
         linkAccounts(discordId, minecraftUuid);
         executeUpdate("DELETE FROM linkcodes WHERE linkcode = ?", linkCode);
     }
-
 
 }

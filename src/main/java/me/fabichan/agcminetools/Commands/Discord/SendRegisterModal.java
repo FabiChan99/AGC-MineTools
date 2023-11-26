@@ -1,6 +1,5 @@
 package me.fabichan.agcminetools.Commands.Discord;
 
-
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -13,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
 import java.util.List;
-
 
 public class SendRegisterModal implements ICommand {
 
@@ -50,9 +48,8 @@ public class SendRegisterModal implements ICommand {
         event.getHook().sendMessageEmbeds(embed.build()).addActionRow(button).queue();
     }
 
-
     @Override
-    public List<Permission> getRequiredPermissions() {
+    public List < Permission > getRequiredPermissions() {
         return Collections.singletonList(Permission.ADMINISTRATOR);
     }
 

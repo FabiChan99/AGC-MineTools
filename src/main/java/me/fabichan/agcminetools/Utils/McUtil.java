@@ -26,15 +26,14 @@ public class McUtil {
         }
     }
 
-    public static List<OfflinePlayer> getAllPlayersEverPlayedAsOfflinePlayer() {
-        List<OfflinePlayer> players = new ArrayList<>();
+    public static List < OfflinePlayer > getAllPlayersEverPlayedAsOfflinePlayer() {
+        List < OfflinePlayer > players = new ArrayList < > ();
         OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
 
         Collections.addAll(players, allPlayers);
 
         return players;
     }
-    
 
     public static String getLastOnline(UUID uuid) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);

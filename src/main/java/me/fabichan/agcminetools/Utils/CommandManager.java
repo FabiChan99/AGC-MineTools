@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.*;
 
 public class CommandManager extends ListenerAdapter {
-    private final Map<String, ICommand> commands = new HashMap<>();
+    private final Map < String, ICommand > commands = new HashMap < > ();
 
-    public Set<ICommand> getCommands() {
-        return Collections.unmodifiableSet(new HashSet<>(commands.values()));
+    public Set < ICommand > getCommands() {
+        return Collections.unmodifiableSet(new HashSet < > (commands.values()));
     }
 
     public void addCommand(ICommand command) {

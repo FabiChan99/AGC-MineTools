@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.UUID;
 
-
 public class DiscordBanListener extends ListenerAdapter {
 
     static DbUtil dbclient;

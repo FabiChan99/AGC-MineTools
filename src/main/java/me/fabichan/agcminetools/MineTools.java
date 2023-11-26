@@ -69,16 +69,15 @@ public final class MineTools extends JavaPlugin {
                     new DiscordBanListener(this),
                     new DiscordMemberRemoveListener(this)
             );
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
         ICommand SendButtonCommand = new SendRegisterModal(this);
         ICommand UserLookupCommand = new UserLookup(this);
         commandManager.addCommand(SendButtonCommand);
         commandManager.addCommand(UserLookupCommand);
-        
+
         Objects.requireNonNull(this.getCommand("lookup")).setExecutor(new LookupCommandExecutor(this));
         Objects.requireNonNull(this.getCommand("lookup")).setTabCompleter(new LookupCommandTabCompletor());
-        
+
         Guild guild = null;
         try {
             guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));
@@ -90,13 +89,12 @@ public final class MineTools extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        for (ICommand command : commandManager.getCommands()) {
+        for (ICommand command: commandManager.getCommands()) {
             getLogger().info(String.format("Slash-Command %s wird registriert!", command.getName()));
             guild.upsertCommand(command.getCommandData()).queue();
             getLogger().info(String.format("Slash-Command %s wurde registriert!", command.getName()));
         }
         registerMinecraftEvents();
-
 
     }
 
