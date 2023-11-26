@@ -62,7 +62,7 @@ public class MinecraftPlayerJoinListener implements Listener {
                         plugin.getLogger().severe("Guild-ID ist nicht gesetzt oder der Bot ist nicht auf dem Server!");
                         return;
                     }
-                    long discordId = LinkManager.getDiscordId(playerUuid);
+                    String discordId = LinkManager.getDiscordId(playerUuid);
                     User user = jda.retrieveUserById(discordId).complete();
                     try {
                         if (guild.retrieveBan(user).complete() != null) {

@@ -9,3 +9,4 @@ commands:
     description: Lookup a Player
     usage: /<command> <player>
     permission: agcminetools.team
+    default: op

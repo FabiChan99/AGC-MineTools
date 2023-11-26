@@ -139,9 +139,16 @@ public class LinkManager {
     }
 
     public static String getDiscordId(UUID minecraftUuid) {
-        String id = (String) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
-        return id;
+        Object result = executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
+        if (result instanceof Long) {
+            return Long.toString((Long) result);
+        } else if (result instanceof String) {
+            return (String) result;
+        } else {
+            return null;
+        }
     }
+
 
     public static String getLinkCode(String minecraftUuid) {
         return (String) executeQuery("SELECT linkcode FROM linkcodes WHERE uuid = ?", "linkcode", minecraftUuid);
