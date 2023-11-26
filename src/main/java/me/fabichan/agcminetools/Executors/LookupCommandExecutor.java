@@ -5,12 +5,14 @@ import me.fabichan.agcminetools.Utils.LinkManager;
 import me.fabichan.agcminetools.Utils.McUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -44,18 +46,16 @@ public class LookupCommandExecutor implements CommandExecutor {
                 String discordname = user.getName();
                 String lastlogin = McUtil.getLastOnline(uuid);
                 String registerdate = LinkManager.getLinkDate(uuid);
-                //String ip = McUtil.getIp(uuid);
-                // build message
                 StringBuilder message = new StringBuilder();
                 message.append(ChatColor.GOLD).append("Informationen über ").append(ChatColor.GREEN).append(name).append(ChatColor.GOLD).append(":").append("\n");
                 message.append(ChatColor.GOLD).append("Discord Name: ").append(ChatColor.GREEN).append(discordname).append("\n");
                 message.append(ChatColor.GOLD).append("Discord UserID: ").append(ChatColor.GREEN).append(user.getId()).append("\n");
                 message.append(ChatColor.GOLD).append("Letzter Login: ").append(ChatColor.GREEN).append(lastlogin).append("\n");
                 message.append(ChatColor.GOLD).append("Registriert seit: ").append(ChatColor.GREEN).append(registerdate).append("\n");
-                //message.append(ChatColor.GOLD).append("IP: ").append(ChatColor.GREEN).append(ip).append("\n");
-                sender.sendMessage(message.toString());
-
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> sender.sendMessage(message.toString()));
             }
         };
+        runnable.runTaskAsynchronously(plugin);
+        return true;
     }
 }
