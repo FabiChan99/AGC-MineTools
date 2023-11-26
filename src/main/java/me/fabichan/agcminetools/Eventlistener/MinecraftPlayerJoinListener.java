@@ -70,8 +70,7 @@ public class MinecraftPlayerJoinListener implements Listener {
                             Bukkit.getScheduler().runTask(plugin, () -> player.kickPlayer(KickMessage));
                             return;
                         }
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
 
                     if (!guild.isMember(user)) {
                         String KickMessage = "Du bist nicht auf unserem Discord-Server! Bitte joine unserem Discord-Server, um auf dem Minecraft-Server spielen zu können.";

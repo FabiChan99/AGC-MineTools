@@ -1,6 +1,5 @@
 package me.fabichan.agcminetools.Commands.Discord;
 
-
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
 import me.fabichan.agcminetools.Utils.LinkManager;
 import me.fabichan.agcminetools.Utils.McUtil;
@@ -18,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
 
 public class UserLookup implements ICommand {
 
@@ -72,9 +70,8 @@ public class UserLookup implements ICommand {
         event.getHook().sendMessageEmbeds(embed.build()).queue();
     }
 
-
     @Override
-    public List<Permission> getRequiredPermissions() {
+    public List < Permission > getRequiredPermissions() {
         return Collections.singletonList(Permission.KICK_MEMBERS);
     }
 
