@@ -52,7 +52,7 @@ public class LookupCommandExecutor implements CommandExecutor {
                 message.append(ChatColor.GOLD).append("Discord UserID: ").append(ChatColor.GREEN).append(user.getId()).append("\n");
                 message.append(ChatColor.GOLD).append("Letzter Login: ").append(ChatColor.GREEN).append(lastlogin).append("\n");
                 message.append(ChatColor.GOLD).append("Registriert seit: ").append(ChatColor.GREEN).append(registerdate).append("\n");
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> sender.sendMessage(message.toString()));
+                Bukkit.getServer().getScheduler().runTask(plugin, () -> sender.sendMessage(message.toString()));
             }
         };
         runnable.runTaskAsynchronously(plugin);
