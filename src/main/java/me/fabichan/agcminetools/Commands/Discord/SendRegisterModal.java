@@ -41,7 +41,7 @@ public class SendRegisterModal implements ICommand {
         }
         event.deferReply().queue();
         EmbedBuilder embed = new EmbedBuilder();
-        String registerEmbedMessage = plugin.getConfig().getString("settings.registerembedmessage");
+        String registerEmbedMessage = plugin.getConfig().getString("messages.registerembedmessage");
         embed.setTitle("Minecraft Registrierung");
         embed.setDescription(registerEmbedMessage);
         embed.setColor(0x00ff00);

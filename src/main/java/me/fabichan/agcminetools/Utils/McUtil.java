@@ -2,11 +2,11 @@ package me.fabichan.agcminetools.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class McUtil {
     private static DbUtil dbclient;
@@ -24,6 +24,15 @@ public class McUtil {
         } else {
             return "Unknown";
         }
+    }
+
+    public static List<OfflinePlayer> getAllPlayersEverPlayedAsOfflinePlayer() {
+        List<OfflinePlayer> players = new ArrayList<>();
+        OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
+
+        Collections.addAll(players, allPlayers);
+
+        return players;
     }
     
 

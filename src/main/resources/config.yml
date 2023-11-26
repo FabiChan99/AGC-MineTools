@@ -12,4 +12,5 @@ database:
   password: "dbPasswort"
 settings:
   chatprefix: "&8[&6AGC MineTools&8] &7"
+messages:
   registerembedmessage: "Minecraft Version: VERSIONHIER \n\nServeraddress: link.de \n\nUm dich zu registrieren, drücke auf den Button \"Registrieren\""
