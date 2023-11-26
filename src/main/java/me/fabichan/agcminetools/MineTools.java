@@ -3,6 +3,7 @@ package me.fabichan.agcminetools;
 import me.fabichan.agcminetools.Commands.Discord.SendRegisterModal;
 import me.fabichan.agcminetools.Commands.Discord.UserLookup;
 import me.fabichan.agcminetools.Eventlistener.*;
+import me.fabichan.agcminetools.Executors.LookupCommandExecutor;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
@@ -73,6 +74,9 @@ public final class MineTools extends JavaPlugin {
         ICommand UserLookupCommand = new UserLookup(this);
         commandManager.addCommand(SendButtonCommand);
         commandManager.addCommand(UserLookupCommand);
+        
+        this.getCommand("lookup").setExecutor(new LookupCommandExecutor(this));
+        
         Guild guild = null;
         try {
             guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));

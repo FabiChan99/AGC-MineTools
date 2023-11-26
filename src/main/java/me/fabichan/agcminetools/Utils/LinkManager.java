@@ -138,8 +138,9 @@ public class LinkManager {
         }
     }
 
-    public static long getDiscordId(UUID minecraftUuid) {
-        return (long) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
+    public static String getDiscordId(UUID minecraftUuid) {
+        String id = (String) executeQuery("SELECT userid FROM mcusers WHERE uuid = ?", "userid", minecraftUuid.toString());
+        return id;
     }
 
     public static String getLinkCode(String minecraftUuid) {
