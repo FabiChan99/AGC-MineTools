@@ -63,7 +63,7 @@ public class LinkManager {
 
         String code = "";
         for (int i = 0; i < 8; i++) {
-            code += (int)(Math.random() * 10);
+            code += (int) (Math.random() * 10);
         }
 
         long expiresAt = System.currentTimeMillis() + 600000; // 600000 Millisekunden = 10 Minuten
@@ -151,7 +151,7 @@ public class LinkManager {
         return (String) executeQuery("SELECT uuid FROM linkcodes WHERE linkcode = ?", "uuid", linkCode);
     }
 
-    private static boolean checkIfExists(String query, Object...params) {
+    private static boolean checkIfExists(String query, Object... params) {
         try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             setParameters(pstmt, params);
