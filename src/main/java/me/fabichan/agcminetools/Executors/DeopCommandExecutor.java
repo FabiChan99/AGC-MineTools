@@ -40,7 +40,7 @@ public class DeopCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        target.setOp(true);
+        target.setOp(false);
         sender.sendMessage(chatprefix + playerMessage);
         return true;
     }
