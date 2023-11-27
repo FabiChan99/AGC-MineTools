@@ -8,5 +8,18 @@ commands:
   lookup:
     description: Lookup a Player
     usage: /<command> <player>
-    permission: agcminetools.team
-    default: op
+  ban:
+    description: Ban a Player
+    usage: /<command> <player> [reason]
+  unban:
+    description: Unban a Player
+    usage: /<command> <player>
+  kick:
+    description: Kick a Player
+    usage: /<command> <player> [reason]
+  op:
+    description: Give a user operator permission
+    usage: /<command> <player>
+  deop:
+    description: Remove a user from operator
+    usage: /<command> <player>

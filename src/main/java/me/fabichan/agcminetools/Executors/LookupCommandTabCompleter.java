@@ -5,20 +5,19 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookupCommandTabCompletor implements TabCompleter {
+public class LookupCommandTabCompleter implements TabCompleter {
 
     @Override
-    public List < String > onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("lookup")) {
-            List < String > benutzerNamen = new ArrayList < > ();
-            List < OfflinePlayer > players = McUtil.getAllPlayersEverPlayedAsOfflinePlayer();
-            for (OfflinePlayer player: players) {
+            List<String> benutzerNamen = new ArrayList<>();
+            List<OfflinePlayer> players = McUtil.getAllPlayersEverPlayedAsOfflinePlayer();
+            for (OfflinePlayer player : players) {
                 benutzerNamen.add(player.getName());
             }
             return benutzerNamen;

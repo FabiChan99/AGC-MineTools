@@ -49,7 +49,7 @@ public class SendRegisterModal implements ICommand {
     }
 
     @Override
-    public List < Permission > getRequiredPermissions() {
+    public List<Permission> getRequiredPermissions() {
         return Collections.singletonList(Permission.ADMINISTRATOR);
     }
 

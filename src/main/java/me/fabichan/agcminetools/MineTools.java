@@ -3,8 +3,7 @@ package me.fabichan.agcminetools;
 import me.fabichan.agcminetools.Commands.Discord.SendRegisterModal;
 import me.fabichan.agcminetools.Commands.Discord.UserLookup;
 import me.fabichan.agcminetools.Eventlistener.*;
-import me.fabichan.agcminetools.Executors.LookupCommandExecutor;
-import me.fabichan.agcminetools.Executors.LookupCommandTabCompletor;
+import me.fabichan.agcminetools.Executors.*;
 import me.fabichan.agcminetools.Utils.CommandManager;
 import me.fabichan.agcminetools.Utils.DbUtil;
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
@@ -69,14 +68,26 @@ public final class MineTools extends JavaPlugin {
                     new DiscordBanListener(this),
                     new DiscordMemberRemoveListener(this)
             );
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         ICommand SendButtonCommand = new SendRegisterModal(this);
         ICommand UserLookupCommand = new UserLookup(this);
         commandManager.addCommand(SendButtonCommand);
         commandManager.addCommand(UserLookupCommand);
 
+        Objects.requireNonNull(this.getCommand("ban")).setExecutor(new BanCommandExecutor(this));
+        Objects.requireNonNull(this.getCommand("ban")).setTabCompleter(new BanCommandTabCompleter());
+
+        Objects.requireNonNull(this.getCommand("deop")).setExecutor(new DeopCommandExecutor(this));
+
+        Objects.requireNonNull(this.getCommand("kick")).setExecutor(new KickCommandExecutor(this));
+
         Objects.requireNonNull(this.getCommand("lookup")).setExecutor(new LookupCommandExecutor(this));
-        Objects.requireNonNull(this.getCommand("lookup")).setTabCompleter(new LookupCommandTabCompletor());
+        Objects.requireNonNull(this.getCommand("lookup")).setTabCompleter(new LookupCommandTabCompleter());
+
+        Objects.requireNonNull(this.getCommand("op")).setExecutor(new OpCommandExecutor(this));
+
+        Objects.requireNonNull(this.getCommand("unban")).setExecutor(new UnbanCommandExecutor(this));
 
         Guild guild = null;
         try {
@@ -89,7 +100,7 @@ public final class MineTools extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        for (ICommand command: commandManager.getCommands()) {
+        for (ICommand command : commandManager.getCommands()) {
             getLogger().info(String.format("Slash-Command %s wird registriert!", command.getName()));
             guild.upsertCommand(command.getCommandData()).queue();
             getLogger().info(String.format("Slash-Command %s wurde registriert!", command.getName()));

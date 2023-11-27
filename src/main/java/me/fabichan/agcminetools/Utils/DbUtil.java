@@ -58,7 +58,7 @@ public class DbUtil {
         }
     }
 
-    public static void executeUpdate(String query, Object...params) {
+    public static void executeUpdate(String query, Object... params) {
         try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             setParameters(pstmt, params);
@@ -68,7 +68,7 @@ public class DbUtil {
         }
     }
 
-    public static Object executeQuery(String query, String columnName, Object...params) {
+    public static Object executeQuery(String query, String columnName, Object... params) {
         try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             setParameters(pstmt, params);
@@ -84,7 +84,7 @@ public class DbUtil {
         return null;
     }
 
-    public static void setParameters(PreparedStatement pstmt, Object...params) throws SQLException {
+    public static void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
         for (int i = 0; i < params.length; i++) {
             pstmt.setObject(i + 1, params[i]);
         }

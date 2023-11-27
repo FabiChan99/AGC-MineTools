@@ -23,7 +23,7 @@ public class AccountLinkSubmitModalEvent extends ListenerAdapter {
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
         if (event.getModalId().equals("linkmodal")) {
-            List < ModalMapping > inputs = event.getValues();
+            List<ModalMapping> inputs = event.getValues();
             if (!inputs.isEmpty()) {
                 String linkCode = inputs.get(0).getAsString();
                 if (LinkManager.isLinkCodeValid(linkCode)) {
