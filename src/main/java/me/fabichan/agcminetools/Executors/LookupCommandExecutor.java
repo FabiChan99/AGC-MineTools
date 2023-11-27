@@ -119,24 +119,27 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
         ItemStack registerDateItem = createItem(Material.BOOK, registeredTitle, ChatColor.GRAY + registerDate, "");
         ItemStack discordUserId = createItem(Material.MAP, discordIdTitle, discordIdDesc, discorduserid);
 
+        if (player.hasPermission("agcminetools.admin") || player.hasPermission("agcminetools.lookup.ip")) {
+            String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.ipAddressTitle")));
+            String ipAddress = getPlayerIpAddress(player.getName());
+            ItemStack ipAddressItem = createItem(Material.NAME_TAG, ipAddressTitle, ChatColor.GRAY + ipAddress, "");
+            inv.setItem(25, ipAddressItem);
+        }
+
         inv.setItem(10, discordItem);
         inv.setItem(13, lastLoginItem);
         inv.setItem(16, registerDateItem);
-        inv.setItem(22, discordUserId);
+        inv.setItem(19, discordUserId);
 
         player.openInventory(inv);
     }
 
-    private String reformatDateString(String dateString) {
-        try {
-            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-            Date date = originalFormat.parse(dateString);
-            return targetFormat.format(date);
-        } catch (ParseException e) {
-            plugin.getLogger().severe(e.getMessage());
-            return "Unknown";
+    private String getPlayerIpAddress(String playerName) {
+        Player target = Bukkit.getServer().getPlayer(playerName);
+        if (target != null) {
+            return Objects.requireNonNull(Objects.requireNonNull(target.getAddress()).getAddress().getHostAddress());
         }
+        return "Offline or Unknown";
     }
 
     @EventHandler
@@ -168,6 +171,18 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
                     player.spigot().sendMessage(lineBelow);
                 }
             }
+        }
+    }
+
+    private String reformatDateString(String dateString) {
+        try {
+            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+            Date date = originalFormat.parse(dateString);
+            return targetFormat.format(date);
+        } catch (ParseException e) {
+            plugin.getLogger().severe(e.getMessage());
+            return "Unknown";
         }
     }
 }

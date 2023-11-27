@@ -8,18 +8,74 @@ commands:
   lookup:
     description: Lookup a Player
     usage: /<command> <player>
+    permissions:
+      agcminetools.lookup
   ban:
     description: Ban a Player
     usage: /<command> <player> [reason]
+    permissions:
+      agcminetools.ban
   unban:
     description: Unban a Player
     usage: /<command> <player>
+    permissions:
+      agcminetools.unban
   kick:
     description: Kick a Player
     usage: /<command> <player> [reason]
+    permissions:
+      agcminetools.kick
+  kill:
+    description: Kill a Player
+    usage: /<command> <player>
+    permissions:
+      agcminetools.kill
   op:
     description: Give a user operator permission
     usage: /<command> <player>
+    permissions:
+      agcminetools.op
   deop:
     description: Remove a user from operator
     usage: /<command> <player>
+    permissions:
+      agcminetools.deop
+  reload:
+    description: Reload the plugin config
+    usage: /<command>
+    permissions:
+      agcminetools.reload
+
+permissions:
+  agcminetools.ban:
+    description: Banne einen Spieler vom Server
+    default: op
+  agcminetools.kick:
+    description: Kicke einen Spieler vom Server
+    default: op
+  agcminetools.lookup:
+    description: Bekomme eine Übersicht über den verknüpften Discord Account des Spielers
+    default: op
+  agcminetools.team:
+    default: op
+    children:
+      agcminetools.lookup: true
+      agcminetools.kick: true
+  agcminetools.team.mod:
+    default: op
+    children:
+      agcminetools.team: true
+      agcminetools.kick: true
+      agcminetools.ban: true
+  agcminetools.team.dev:
+    default: op
+    children:
+      agcminetools.team: true
+      agcminetools.ban: true
+  agcminetools.team.admin:
+    default: op
+    children:
+      agcminetools.lookup.ip: true
+      agcminetools.team: true
+      agcminetools.team.mod: true
+      agcminetools.team.dev: true

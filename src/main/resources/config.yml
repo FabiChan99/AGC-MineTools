@@ -27,6 +27,7 @@ lookup:
   registeredTitle: "&eRegistriert seit"
   copyIdChatMessage: "&6Klicke hier um die ID des Nutzers zu kopieren."
   copyIdChatHover: "&8Kopiert folgende ID in deine Zwischenablage: &7"
+  ipAddressTitle: "&5IP-Adresse"
 ban:
   banTitle: "&8[&6AGC MineTools&8] &7"
   commandUsage: "&6/ban <Player> <Begründung>"
@@ -58,3 +59,10 @@ deop:
   commandUsage: "&6/deop <Player>"
   noPlayerFound: "&cDer angegebene Nutzer wurde nicht gefunden."
   playerMessage: "&6Der angegebene Spieler ist nun kein Serveroperator mehr!"
+kill:
+  commandUsage: "&6/kill <Player>"
+  playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."
+  playerMessage: "&6Der Spieler wurde erfolgreich umgebracht."
+reload:
+  commandUsage: "&6/reload"
+  reloadMessage: "&6Die Config des Plugins wurde erfolgreich neugeladen."
