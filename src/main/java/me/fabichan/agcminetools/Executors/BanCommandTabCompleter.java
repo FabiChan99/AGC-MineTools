@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class BanCommandTabCompleter implements TabCompleter {
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (command.getName().equalsIgnoreCase("ban") && args.length == 1) {
