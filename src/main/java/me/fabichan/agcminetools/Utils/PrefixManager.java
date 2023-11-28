@@ -14,13 +14,13 @@ import org.bukkit.scoreboard.Team;
 public class PrefixManager implements Listener {
     private final JavaPlugin plugin;
     private final PrefixUtil prefixUtil;
-    
+
     public PrefixManager(JavaPlugin plugin, PrefixUtil prefixcfg) {
         this.plugin = plugin;
         this.prefixUtil = prefixcfg;
         PrefixUpdateTask();
     }
-    
+
     public void PrefixUpdateTask() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -33,9 +33,9 @@ public class PrefixManager implements Listener {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (manager == null) return;
         Scoreboard scoreboard = manager.getNewScoreboard();
-        
+
         registerTeams(scoreboard);
-        
+
         setPlayerInTeam(player, scoreboard);
 
         player.setScoreboard(scoreboard);
@@ -99,7 +99,6 @@ public class PrefixManager implements Listener {
         String format = prefix + player.getName() + " " + chatColor + event.getMessage();
         event.setFormat(format);
     }
-
 
 
 }

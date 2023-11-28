@@ -1,14 +1,15 @@
 package me.fabichan.agcminetools.Utils;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.ChatColor;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class PrefixUtil {
-    
+
     private final Map<String, String> chatPrefixes = new HashMap<>();
     private final Map<String, String> tablistPrefixes = new HashMap<>();
     private final Map<String, String> chatColors = new HashMap<>();
@@ -17,7 +18,7 @@ public class PrefixUtil {
     public PrefixUtil(JavaPlugin plugin) {
         loadConfig(plugin.getConfig());
     }
-    
+
     private void loadConfig(FileConfiguration config) {
         for (String key : config.getConfigurationSection("prefixes").getKeys(false)) {
             chatPrefixes.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("prefixes." + key + ".Chat")));
@@ -46,8 +47,6 @@ public class PrefixUtil {
     public Set<String> getGroupNames() {
         return chatPrefixes.keySet();
     }
-    
-    
-    
-    
+
+
 }

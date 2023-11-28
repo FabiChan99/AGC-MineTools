@@ -12,8 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -56,7 +56,7 @@ public final class MineTools extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        
+
         PrefixUtil prefixConfig = new PrefixUtil(this);
         getServer().getPluginManager().registerEvents(new PrefixManager(this, prefixConfig), this);
         DbUtil.initDatabase();
