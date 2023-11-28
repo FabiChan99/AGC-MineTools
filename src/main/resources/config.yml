@@ -77,3 +77,6 @@ gamemode:
   playerMessageSelf: "&6Dein Spielmodus wurde erfolgreich geändert auf: &8"
   playerMessage: "&6Der Spielmodus wurde erfolgreich geändert auf: &8"
   invalidGameMode: "&6Der angegebene Spielmodus existiert nicht."
+uwu:
+  playerMessage: "&6Das Herz wurde erfolgreich erzeugt."
+  playerOnly: "&6Dieser Befehl kann nur von einem Spieler ausgeführt werden."

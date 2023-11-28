@@ -97,9 +97,6 @@ public final class MineTools extends JavaPlugin {
 
         Objects.requireNonNull(this.getCommand("gamemode")).setExecutor(new GameModeCommandExecutor(this));
 
-        KillCommandExecutor killCommandExecutor = new KillCommandExecutor(this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this, killCommandExecutor), this);
-
         Guild guild = null;
         try {
             guild = jda.getGuildById(Objects.requireNonNull(getConfig().getString("bot.guildid")));
