@@ -56,7 +56,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.noPermissions")));
+        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("messages.noPermissions")));
         String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.commandUsage")));
         String notLinked = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.notLinked")));
         String playerOnlyCommand = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.playerOnlyCommand")));

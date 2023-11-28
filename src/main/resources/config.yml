@@ -12,9 +12,10 @@ database:
   password: "dbPasswort"
 settings:
   chatprefix: "&8[&6AGC MineTools&8] &7• "
-  noPermissions: "&cDu darfst diesen Befehl nicht ausführen."
 messages:
   registerembedmessage: "Minecraft Version: VERSIONHIER \n\nServeraddress: link.de \n\nUm dich zu registrieren, drücke auf den Button \"Registrieren\""
+  playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."
+  noPermissions: "&cDu darfst diesen Befehl nicht ausführen."
 lookup:
   commandUsage: "&6/lookup <Player>"
   notLinked: "&6Unter diesem Namen konnte kein verknüpfter Account gefunden werden."
@@ -31,7 +32,6 @@ lookup:
 ban:
   banTitle: "&8[&6AGC MineTools&8] &7"
   commandUsage: "&6/ban <Player> <Begründung>"
-  noPlayerFound: "&6Dieser Spieler wurde nicht gefunden."
   playerMessage: "&6Der Spieler wurde erfolgreich vom Server gebannt."
   banMessage: "&cDu wurdest permanent vom Server gebannt!"
   banReason: "&8Begründung: "
@@ -44,7 +44,6 @@ unban:
 kick:
   kickTitle: "&8[&6AGC MineTools&8] &7"
   commandUsage: "&6/kick <Player> <Begründung>"
-  noPlayerFound: "&6Dieser Spieler wurde nicht gefunden."
   playerMessage: "&cDer Spieler wurde erfolgreich vom Server geworfen."
   kickMessage: "&cDu wurdest vom Server geworfen."
   kickReason: "&8Begründung: "
@@ -52,12 +51,10 @@ kick:
 op:
   consoleOnly: "&cDieser Befehl kann aus Sicherheitsgründen nur in der Server-Console ausgeführt werden"
   commandUsage: "&6/op <Player>"
-  noPlayerFound: "&cDer angegebene Nutzer wurde nicht gefunden."
   playerMessage: "&6Der angegebene Spieler ist nun ein Serveroperator!"
 deop:
   consoleOnly: "&cDieser Befehl kann aus Sicherheitsgründen nur in der Server-Console ausgeführt werden"
   commandUsage: "&6/deop <Player>"
-  noPlayerFound: "&cDer angegebene Nutzer wurde nicht gefunden."
   playerMessage: "&6Der angegebene Spieler ist nun kein Serveroperator mehr!"
 kill:
   commandUsage: "&6/kill <Player>"
@@ -73,10 +70,6 @@ heal:
   playerMessage: "&6Die Herzen des Spielers wurden erfolgreich aufgefüllt."
 gamemode:
   commandUsage: "&6/gamemode <GameMode> [Spieler]"
-  playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."
   playerMessageSelf: "&6Dein Spielmodus wurde erfolgreich geändert auf: &8"
   playerMessage: "&6Der Spielmodus wurde erfolgreich geändert auf: &8"
   invalidGameMode: "&6Der angegebene Spielmodus existiert nicht."
-uwu:
-  playerMessage: "&6Das Herz wurde erfolgreich erzeugt."
-  playerOnly: "&6Dieser Befehl kann nur von einem Spieler ausgeführt werden."
