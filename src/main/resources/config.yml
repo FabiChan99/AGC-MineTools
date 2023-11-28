@@ -66,3 +66,14 @@ kill:
 reload:
   commandUsage: "&6/reload"
   reloadMessage: "&6Die Config des Plugins wurde erfolgreich neugeladen."
+heal:
+  commandUsage: "&6/heal [Player]"
+  playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."
+  playerMessageSelf: "&6Deine Herzen wurde erfolgreich aufgefüllt."
+  playerMessage: "&6Die Herzen des Spielers wurden erfolgreich aufgefüllt."
+gamemode:
+  commandUsage: "&6/gamemode <GameMode> [Spieler]"
+  playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."
+  playerMessageSelf: "&6Dein Spielmodus wurde erfolgreich geändert auf: &8"
+  playerMessage: "&6Der Spielmodus wurde erfolgreich geändert auf: &8"
+  invalidGameMode: "&6Der angegebene Spielmodus existiert nicht."
