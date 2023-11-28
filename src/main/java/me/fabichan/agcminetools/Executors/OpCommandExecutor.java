@@ -7,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class OpCommandExecutor implements CommandExecutor {
 
@@ -17,12 +20,12 @@ public class OpCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("settings.chatprefix"));
-        String consoleOnly = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("op.consoleOnly"));
-        String commandUsage = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("op.commandUsage"));
-        String noPlayer = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("op.noPlayerFound"));
-        String playerMessage = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("op.playerMessage"));
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
+        String consoleOnly = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.consoleOnly")));
+        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.commandUsage")));
+        String noPlayer = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.noPlayerFound")));
+        String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.playerMessage")));
 
         if (sender instanceof Player) {
             sender.sendMessage(chatprefix + consoleOnly);

@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,10 +43,10 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
     private static ItemStack createItem(Material material, String name, String lore, String discordId) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
+        Objects.requireNonNull(meta).setDisplayName(name);
         List<String> lores = new ArrayList<>();
         lores.add(lore);
-        if (!discordId.equals("")) {
+        if (!discordId.isEmpty()) {
             lores.add(ChatColor.GRAY + "ID: " + discordId);
         }
         meta.setLore(lores);
@@ -54,7 +55,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.noPermissions")));
         String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.commandUsage")));
         String notLinked = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.notLinked")));
@@ -118,24 +119,27 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
         ItemStack registerDateItem = createItem(Material.BOOK, registeredTitle, ChatColor.GRAY + registerDate, "");
         ItemStack discordUserId = createItem(Material.MAP, discordIdTitle, discordIdDesc, discorduserid);
 
+        if (player.hasPermission("agcminetools.admin") || player.hasPermission("agcminetools.lookup.ip")) {
+            String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.ipAddressTitle")));
+            String ipAddress = getPlayerIpAddress(player.getName());
+            ItemStack ipAddressItem = createItem(Material.NAME_TAG, ipAddressTitle, ChatColor.GRAY + ipAddress, "");
+            inv.setItem(25, ipAddressItem);
+        }
+
         inv.setItem(10, discordItem);
         inv.setItem(13, lastLoginItem);
         inv.setItem(16, registerDateItem);
-        inv.setItem(22, discordUserId);
+        inv.setItem(19, discordUserId);
 
         player.openInventory(inv);
     }
 
-    private String reformatDateString(String dateString) {
-        try {
-            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-            Date date = originalFormat.parse(dateString);
-            return targetFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "Unknown";
+    private String getPlayerIpAddress(String playerName) {
+        Player target = Bukkit.getServer().getPlayer(playerName);
+        if (target != null) {
+            return Objects.requireNonNull(Objects.requireNonNull(target.getAddress()).getAddress().getHostAddress());
         }
+        return "Offline or Unknown";
     }
 
     @EventHandler
@@ -151,9 +155,9 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
                 player.closeInventory();
 
                 ItemMeta meta = event.getCurrentItem().getItemMeta();
-                if (meta.hasLore()) {
+                if (Objects.requireNonNull(meta).hasLore()) {
                     List<String> lore = meta.getLore();
-                    String textToCopy = lore.size() > 1 ? lore.get(1).substring(6) : "";
+                    String textToCopy = Objects.requireNonNull(lore).size() > 1 ? lore.get(1).substring(6) : "";
 
                     TextComponent lineAbove = new TextComponent(ChatColor.GRAY + "--------------------------------");
                     player.spigot().sendMessage(lineAbove);
@@ -167,6 +171,18 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
                     player.spigot().sendMessage(lineBelow);
                 }
             }
+        }
+    }
+
+    private String reformatDateString(String dateString) {
+        try {
+            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+            Date date = originalFormat.parse(dateString);
+            return targetFormat.format(date);
+        } catch (ParseException e) {
+            plugin.getLogger().severe(e.getMessage());
+            return "Unknown";
         }
     }
 }

@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class UnbanCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
         String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.noPermissions")));
         String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("unban.commandUsage")));
@@ -41,10 +42,9 @@ public class UnbanCommandExecutor implements CommandExecutor {
         if (Bukkit.getBanList(BanList.Type.NAME).isBanned(target)) {
             Bukkit.getBanList(BanList.Type.NAME).pardon(target);
             sender.sendMessage(chatprefix + playerMessage);
-            return true;
         } else {
             sender.sendMessage(chatprefix + playerNotBanned);
-            return true;
         }
+        return true;
     }
 }

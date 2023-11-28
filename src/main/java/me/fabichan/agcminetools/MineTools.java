@@ -82,12 +82,20 @@ public final class MineTools extends JavaPlugin {
 
         Objects.requireNonNull(this.getCommand("kick")).setExecutor(new KickCommandExecutor(this));
 
+        Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommandExecutor(this));
+
         Objects.requireNonNull(this.getCommand("lookup")).setExecutor(new LookupCommandExecutor(this));
         Objects.requireNonNull(this.getCommand("lookup")).setTabCompleter(new LookupCommandTabCompleter());
 
         Objects.requireNonNull(this.getCommand("op")).setExecutor(new OpCommandExecutor(this));
 
         Objects.requireNonNull(this.getCommand("unban")).setExecutor(new UnbanCommandExecutor(this));
+
+        Objects.requireNonNull(this.getCommand("reload")).setExecutor(new ReloadCommandExecutor(this));
+
+        Objects.requireNonNull(this.getCommand("heal")).setExecutor(new HealCommandExecutor(this));
+
+        Objects.requireNonNull(this.getCommand("gamemode")).setExecutor(new GameModeCommandExecutor(this));
 
         Guild guild = null;
         try {
