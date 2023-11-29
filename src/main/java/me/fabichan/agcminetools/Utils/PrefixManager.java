@@ -13,7 +13,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.io.Console;
 
 public class PrefixManager implements Listener {
     private final JavaPlugin plugin;
