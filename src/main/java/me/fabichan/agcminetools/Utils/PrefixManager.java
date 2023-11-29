@@ -141,7 +141,6 @@ public class PrefixManager implements Listener {
         if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
         }
-        System.out.println(format);
         format = format.replaceAll("%", "%%");
         event.setFormat(format);
     }
