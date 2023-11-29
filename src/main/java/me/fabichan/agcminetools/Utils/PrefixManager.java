@@ -1,6 +1,7 @@
 package me.fabichan.agcminetools.Utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.apache.commons.collections4.iterators.ReverseListIterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,6 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class PrefixManager implements Listener {
@@ -58,14 +63,19 @@ public class PrefixManager implements Listener {
 
     private void setPlayerInTeam(Player player, Scoreboard scoreboard) {
         boolean inTeam = false;
-        for (String group : prefixUtil.getGroupNames()) {
+        List<String> reversedGroups = new ArrayList<>(prefixUtil.getGroupNames());
+        Collections.reverse(reversedGroups);
+
+        for (String group : reversedGroups) {
             if (player.hasPermission(prefixUtil.getPermission(group))) {
                 Team team = getTeam(scoreboard, group);
                 if (team != null) {
                     team.addPlayer(player);
-                    String prefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix(group));
+                    String prefix = prefixUtil.getTablistPrefix(group);
+                    if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                        prefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix(group));
+                    }
                     team.setPrefix(prefix);
-                    player.setDisplayName(prefix);
                     player.setPlayerListName(prefix);
                     inTeam = true;
                     break;
@@ -76,11 +86,15 @@ public class PrefixManager implements Listener {
         if (!inTeam) {
             Team defaultTeam = getOrCreateTeam(scoreboard, "default");
             defaultTeam.addPlayer(player);
-            String defaultPrefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix("default"));
+            String defaultPrefix = prefixUtil.getTablistPrefix("default");
+            if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+                defaultPrefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix("default"));
+            }
             defaultTeam.setPrefix(defaultPrefix);
-            player.setDisplayName(defaultPrefix + player.getName());
+            player.setPlayerListName(defaultPrefix + player.getName());
         }
     }
+
 
     private Team getOrCreateTeam(Scoreboard scoreboard, String name) {
         Team team = scoreboard.getTeam(name);
@@ -108,7 +122,10 @@ public class PrefixManager implements Listener {
         String chatColor = "";
         boolean permissionFound = false;
 
-        for (String group : prefixUtil.getGroupNames()) {
+        List<String> reversedGroups = new ArrayList<>(prefixUtil.getGroupNames());
+        Collections.reverse(reversedGroups);
+
+        for (String group : reversedGroups) {
             if (player.hasPermission(prefixUtil.getPermission(group))) {
                 prefix = prefixUtil.getChatPrefix(group);
                 chatColor = prefixUtil.getChatColor(group);
@@ -122,7 +139,9 @@ public class PrefixManager implements Listener {
         prefix = ChatColor.translateAlternateColorCodes('&', prefix);
         chatColor = ChatColor.translateAlternateColorCodes('&', chatColor);
         String format = prefix + chatColor + event.getMessage();
-        format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+        if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+            format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+        }
         System.out.println(format);
         format = format.replaceAll("%", "%%");
         event.setFormat(format);
