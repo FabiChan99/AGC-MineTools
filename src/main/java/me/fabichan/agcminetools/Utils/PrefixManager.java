@@ -1,7 +1,6 @@
 package me.fabichan.agcminetools.Utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.collections4.iterators.ReverseListIterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -87,7 +86,7 @@ public class PrefixManager implements Listener {
             Team defaultTeam = getOrCreateTeam(scoreboard, "default");
             defaultTeam.addPlayer(player);
             String defaultPrefix = prefixUtil.getTablistPrefix("default");
-            if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+            if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 defaultPrefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix("default"));
             }
             defaultTeam.setPrefix(defaultPrefix);
@@ -104,7 +103,7 @@ public class PrefixManager implements Listener {
         }
         return team;
     }
-    
+
     private Team getTeam(Scoreboard scoreboard, String name) {
         return scoreboard.getTeam(name);
     }
@@ -139,7 +138,7 @@ public class PrefixManager implements Listener {
         prefix = ChatColor.translateAlternateColorCodes('&', prefix);
         chatColor = ChatColor.translateAlternateColorCodes('&', chatColor);
         String format = prefix + chatColor + event.getMessage();
-        if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+        if (plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
         }
         System.out.println(format);
