@@ -11,6 +11,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
+import java.io.Console;
+
 public class PrefixManager implements Listener {
     private final JavaPlugin plugin;
     private final PrefixUtil prefixUtil;
@@ -82,23 +84,25 @@ public class PrefixManager implements Listener {
         Player player = event.getPlayer();
         String prefix = "";
         String chatColor = "";
+        boolean permissionFound = false;
 
         for (String group : prefixUtil.getGroupNames()) {
             if (player.hasPermission(prefixUtil.getPermission(group))) {
                 prefix = prefixUtil.getChatPrefix(group);
                 chatColor = prefixUtil.getChatColor(group);
+                permissionFound = true;
                 break;
             }
         }
-
-        if (prefix.isEmpty()) {
-            prefix = prefixUtil.getChatPrefix("default");
-            chatColor = prefixUtil.getChatColor("default");
+        if (!permissionFound) {
+            return;
         }
-
-        String format = prefix + player.getName() + " " + chatColor + event.getMessage();
+        prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+        chatColor = ChatColor.translateAlternateColorCodes('&', chatColor);
+        String format = prefix + chatColor + event.getMessage();
+        format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+        System.out.println(format);
+        format = format.replaceAll("%", "%%");
         event.setFormat(format);
     }
-
-
 }

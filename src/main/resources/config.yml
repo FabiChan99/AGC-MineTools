@@ -12,12 +12,6 @@ database:
   password: "dbPasswort"
 settings:
   chatprefix: "&8[&6AGC MineTools&8] &7• "
-prefixes:
-  Owner: # Example!!! You Can Change Section names as well!
-    Tablist: '&4Admin &8• &4'
-    Chat: '&4Administrator &8• &4'
-    Chatcolor: '&7'
-    Permission: prefix.admin
 messages:
   registerembedmessage: "Minecraft Version: VERSIONHIER \n\nServeraddress: link.de \n\nUm dich zu registrieren, drücke auf den Button \"Registrieren\""
   playerNotFound: "&6Der angegebene Spieler wurde nicht gefunden."

@@ -1,0 +1,10 @@
+Admin: # Example!!! You Can Change Section names as well!
+  Tablist: '&4Admin &8• &4'
+  Chat: '&cAdmin &7| &c%player_name% &7»&f '
+  Chatcolor: '&f'
+  Permission: prefix.admin
+Player: # Example!!! You Can Change Section names as well!
+  Tablist: '&7Spieler | '
+  Chat: '&7Spieler | %player_name% &7»&f '
+  Chatcolor: '&ff'
+  Permission: prefix.player

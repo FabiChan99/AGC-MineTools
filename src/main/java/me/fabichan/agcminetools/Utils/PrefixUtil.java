@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class PrefixUtil {
@@ -16,17 +17,20 @@ public class PrefixUtil {
     private final Map<String, String> permissions = new HashMap<>();
 
     public PrefixUtil(JavaPlugin plugin) {
-        loadConfig(plugin.getConfig());
+        CustomConfigManager configManager = new CustomConfigManager(plugin, "prefixes.yml");
+        configManager.saveDefaultConfig();
+        loadConfig(configManager.getConfig());
     }
 
     private void loadConfig(FileConfiguration config) {
-        for (String key : config.getConfigurationSection("prefixes").getKeys(false)) {
-            chatPrefixes.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("prefixes." + key + ".Chat")));
-            tablistPrefixes.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("prefixes." + key + ".Tablist")));
-            chatColors.put(key, config.getString("prefixes." + key + ".Chatcolor"));
-            permissions.put(key, config.getString("prefixes." + key + ".Permission"));
+        for (String key : config.getKeys(false)) {
+            chatPrefixes.put(key, ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(key + ".Chat"))));
+            tablistPrefixes.put(key, ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(key + ".Tablist"))));
+            chatColors.put(key, config.getString(key + ".Chatcolor"));
+            permissions.put(key, config.getString(key + ".Permission"));
         }
     }
+
 
     public String getChatPrefix(String group) {
         return chatPrefixes.getOrDefault(group, "");

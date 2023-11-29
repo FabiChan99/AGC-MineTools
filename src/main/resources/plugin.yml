@@ -3,7 +3,6 @@ version: '${project.version}'
 main: me.fabichan.agcminetools.MineTools
 depend:
   - LuckPerms
-softdepend:
   - PlaceholderAPI
 api-version: '1.20'
 load: STARTUP
