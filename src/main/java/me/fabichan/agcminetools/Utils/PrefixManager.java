@@ -29,7 +29,7 @@ public class PrefixManager implements Listener {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 updateScoreboardForPlayer(player);
             }
-        }, 0L, 400L);
+        }, 0L, 200L);
     }
 
     private void updateScoreboardForPlayer(Player player) {
@@ -57,19 +57,40 @@ public class PrefixManager implements Listener {
     }
 
     private void setPlayerInTeam(Player player, Scoreboard scoreboard) {
+        boolean inTeam = false;
         for (String group : prefixUtil.getGroupNames()) {
             if (player.hasPermission(prefixUtil.getPermission(group))) {
                 Team team = getTeam(scoreboard, group);
-                team.addPlayer(player);
-                player.setDisplayName(team.getPrefix() + player.getName());
-                return;
+                if (team != null) {
+                    team.addPlayer(player);
+                    String prefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix(group));
+                    team.setPrefix(prefix);
+                    player.setDisplayName(prefix);
+                    player.setPlayerListName(prefix);
+                    inTeam = true;
+                    break;
+                }
             }
         }
-        Team defaultTeam = getTeam(scoreboard, "default");
-        defaultTeam.addPlayer(player);
-        player.setDisplayName(defaultTeam.getPrefix() + player.getName());
+
+        if (!inTeam) {
+            Team defaultTeam = getOrCreateTeam(scoreboard, "default");
+            defaultTeam.addPlayer(player);
+            String defaultPrefix = PlaceholderAPI.setPlaceholders(player, prefixUtil.getTablistPrefix("default"));
+            defaultTeam.setPrefix(defaultPrefix);
+            player.setDisplayName(defaultPrefix + player.getName());
+        }
     }
 
+    private Team getOrCreateTeam(Scoreboard scoreboard, String name) {
+        Team team = scoreboard.getTeam(name);
+        if (team == null) {
+            team = scoreboard.registerNewTeam(name);
+            team.setPrefix(prefixUtil.getTablistPrefix(name));
+        }
+        return team;
+    }
+    
     private Team getTeam(Scoreboard scoreboard, String name) {
         return scoreboard.getTeam(name);
     }

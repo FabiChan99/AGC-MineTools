@@ -1,6 +1,6 @@
 Admin: # Example!!! You Can Change Section names as well!
-  Tablist: '&4Admin &8• &4'
-  Chat: '&cAdmin &7| &c%player_name% &7»&f '
+  Tablist: '&4Admin &8•&4 %player_name% &7[&eTeam&7]'
+  Chat: '&cAdmin &7| &c%player_name% &7» '
   Chatcolor: '&f'
   Permission: prefix.admin
 Player: # Example!!! You Can Change Section names as well!
