@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Target;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -75,6 +77,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
             public void run() {
                 String name = args[0];
                 UUID uuid = plugin.getServer().getOfflinePlayer(name).getUniqueId();
+                OfflinePlayer target = Bukkit.getServer().getOfflinePlayer(uuid);
                 String discorduserid = LinkManager.getDiscordId(uuid);
                 if (discorduserid == null) {
                     Bukkit.getScheduler().runTask(plugin, () -> sender.sendMessage(chatprefix + notLinked));
@@ -84,11 +87,10 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
                 String discordname = user.getName();
                 String lastLoginDate = reformatDateString(McUtil.getLastOnline(uuid));
                 String registerDate = reformatDateString(LinkManager.getLinkDate(uuid));
-
+                
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     if (sender instanceof Player) {
-                        Player player = (Player) sender;
-                        openProfileGUI(player, discordname, lastLoginDate, registerDate, discorduserid);
+                        openProfileGUI((Player) sender, discordname, lastLoginDate, registerDate, discorduserid, target);
                     } else {
                         sender.sendMessage(chatprefix + playerOnlyCommand);
                     }
@@ -98,7 +100,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
         return true;
     }
 
-    private void openProfileGUI(Player player, String discordName, String lastLogin, String registerDate, String discorduserid) {
+    private void openProfileGUI(Player player, String discordName, String lastLogin, String registerDate, String discorduserid , OfflinePlayer target) {
         String inventoryTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.inventoryTitle")));
         String discordTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.discordTitle")));
         String lastLoginTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.lastLoginTitle")));
@@ -119,26 +121,37 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
         ItemStack lastLoginItem = createItem(Material.CLOCK, lastLoginTitle, ChatColor.GRAY + lastLogin, "");
         ItemStack registerDateItem = createItem(Material.BOOK, registeredTitle, ChatColor.GRAY + registerDate, "");
         ItemStack discordUserId = createItem(Material.MAP, discordIdTitle, discordIdDesc, discorduserid);
-
-        if (player.hasPermission("agcminetools.admin") || player.hasPermission("agcminetools.lookup.ip")) {
+        
+        if (target.isOnline() && player.hasPermission("agcminetools.admin") || player.hasPermission("agcminetools.lookup.ip")) {
             String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.ipAddressTitle")));
-            String ipAddress = getPlayerIpAddress(player.getName());
+            String ipAddress = getPlayerIpAddress(target.getName());
             ItemStack ipAddressItem = createItem(Material.NAME_TAG, ipAddressTitle, ChatColor.GRAY + ipAddress, "");
             inv.setItem(25, ipAddressItem);
         }
-
+        else {
+            String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.ipAddressTitle")));
+            String ipAddress = "Offline or Unknown";
+            ItemStack ipAddressItem = createItem(Material.NAME_TAG, ipAddressTitle, ChatColor.GRAY + ipAddress, "");
+            inv.setItem(25, ipAddressItem);
+        }
+        
         inv.setItem(10, discordItem);
         inv.setItem(13, lastLoginItem);
         inv.setItem(16, registerDateItem);
         inv.setItem(19, discordUserId);
-
+        
         player.openInventory(inv);
     }
 
     private String getPlayerIpAddress(String playerName) {
+        try{
+            
         Player target = Bukkit.getServer().getPlayer(playerName);
         if (target != null) {
             return Objects.requireNonNull(Objects.requireNonNull(target.getAddress()).getAddress().getHostAddress());
+        }
+        } catch (Exception e) {
+            return "Offline or Unknown";
         }
         return "Offline or Unknown";
     }
