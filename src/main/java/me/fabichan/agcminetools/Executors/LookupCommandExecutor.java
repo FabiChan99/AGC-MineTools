@@ -75,6 +75,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
             public void run() {
                 String name = args[0];
                 UUID uuid = plugin.getServer().getOfflinePlayer(name).getUniqueId();
+                Player target = Bukkit.getServer().getPlayer(name);
                 String discorduserid = LinkManager.getDiscordId(uuid);
                 if (discorduserid == null) {
                     Bukkit.getScheduler().runTask(plugin, () -> sender.sendMessage(chatprefix + notLinked));
@@ -86,9 +87,8 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
                 String registerDate = reformatDateString(LinkManager.getLinkDate(uuid));
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (sender instanceof Player) {
-                        Player player = (Player) sender;
-                        openProfileGUI(player, discordname, lastLoginDate, registerDate, discorduserid);
+                    if (target != null) {
+                        openProfileGUI(target, discordname, lastLoginDate, registerDate, discorduserid);
                     } else {
                         sender.sendMessage(chatprefix + playerOnlyCommand);
                     }
