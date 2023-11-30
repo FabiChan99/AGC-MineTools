@@ -27,7 +27,7 @@ public class GameModeCommandExecutor implements CommandExecutor {
         String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.noPermissions")));
         String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("gamemode.commandUsage")));
         String playerNotFound = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.playerNotFound")));
-        String invalidGameMode = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("gamemode.invalidGameMode")));
+        String invalidGameMode = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.invalidGameMode")));
         String playerMessageSelf = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("gamemode.playerMessageSelf")));
         String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("gamemode.playerMessage")));
         if (!sender.hasPermission("agcminetools.gamemode")) {
