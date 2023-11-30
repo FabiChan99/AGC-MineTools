@@ -8,3 +8,4 @@ Player: # Example!!! You Can Change Section names as well!
   Chat: '&7Spieler | %player_name% &7»&f '
   Chatcolor: '&ff'
   Permission: prefix.player
+# you can as many groups as u want
