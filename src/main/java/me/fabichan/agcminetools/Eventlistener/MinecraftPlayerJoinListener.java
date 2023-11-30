@@ -2,6 +2,7 @@ package me.fabichan.agcminetools.Eventlistener;
 
 import me.fabichan.agcminetools.Utils.JDAProvider;
 import me.fabichan.agcminetools.Utils.LinkManager;
+import me.fabichan.agcminetools.Utils.CustomConfigManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;

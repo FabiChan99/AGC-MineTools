@@ -1,5 +1,6 @@
 package me.fabichan.agcminetools.Executors;
 
+import me.fabichan.agcminetools.Utils.MessageConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,11 +22,11 @@ public class OpCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
-        String consoleOnly = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.consoleOnly")));
-        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.commandUsage")));
-        String noPlayer = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("message.playerNotFound")));
-        String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("op.playerMessage")));
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("general.chatprefix")));
+        String consoleOnly = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.consoleOnly")));
+        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("op.commandUsage")));
+        String noPlayer = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.playerNotFound")));
+        String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("op.playerMessage")));
 
         if (sender instanceof Player) {
             sender.sendMessage(chatprefix + consoleOnly);

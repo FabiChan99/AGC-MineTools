@@ -1,6 +1,7 @@
 package me.fabichan.agcminetools.Commands.Discord;
 
 import me.fabichan.agcminetools.Utils.Interfaces.ICommand;
+import me.fabichan.agcminetools.Utils.MessageConfigManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -39,7 +40,7 @@ public class SendRegisterModal implements ICommand {
         }
         event.deferReply().queue();
         EmbedBuilder embed = new EmbedBuilder();
-        String registerEmbedMessage = plugin.getConfig().getString("messages.registerembedmessage");
+        String registerEmbedMessage = MessageConfigManager.getMessage("discord.registerEmbedMessage");
         embed.setTitle("Minecraft Registrierung");
         embed.setDescription(registerEmbedMessage);
         embed.setColor(0x00ff00);

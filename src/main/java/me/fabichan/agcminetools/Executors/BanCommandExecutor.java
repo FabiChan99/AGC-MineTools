@@ -1,5 +1,6 @@
 package me.fabichan.agcminetools.Executors;
 
+import me.fabichan.agcminetools.Utils.MessageConfigManager;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,16 +23,16 @@ public class BanCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("messages.noPermissions")));
-        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.commandUsage")));
-        String noPlayer = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.")));
-        String banMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.banMessage")));
-        String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.playerMessage")));
-        String banReason = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.banReason")));
-        String noticeMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.noticeMessage")));
-        String socialLink = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.socialLink")));
-        String banTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("ban.banTitle")));
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
+        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.noPermissions")));
+        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.commandUsage")));
+        String noPlayer = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.playerNotFound")));
+        String banMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.banMessage")));
+        String playerMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.playerMessage")));
+        String banReason = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.banReason")));
+        String noticeMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.noticeMessage")));
+        String socialLink = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.socialLink")));
+        String banTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("ban.banTitle")));
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("general.chatprefix")));
         if (!sender.isOp() && !sender.hasPermission("agcminetools.ban")) {
             sender.sendMessage(chatprefix + noPermissions);
             return true;

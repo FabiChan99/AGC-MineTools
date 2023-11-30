@@ -3,6 +3,7 @@ package me.fabichan.agcminetools.Executors;
 import me.fabichan.agcminetools.Utils.JDAProvider;
 import me.fabichan.agcminetools.Utils.LinkManager;
 import me.fabichan.agcminetools.Utils.McUtil;
+import me.fabichan.agcminetools.Utils.MessageConfigManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -56,11 +57,11 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("messages.noPermissions")));
-        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.commandUsage")));
-        String notLinked = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.notLinked")));
-        String playerOnlyCommand = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.playerOnlyCommand")));
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
+        String noPermissions = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.noPermissions")));
+        String commandUsage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.commandUsage")));
+        String notLinked = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.notLinked")));
+        String playerOnlyCommand = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("error.playerOnlyCommand")));
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("general.chatprefix")));
         if (!sender.isOp() && !sender.hasPermission("agcminetools.team")) {
             sender.sendMessage(chatprefix + noPermissions);
             return true;
@@ -98,13 +99,13 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
     }
 
     private void openProfileGUI(Player player, String discordName, String lastLogin, String registerDate, String discorduserid) {
-        String inventoryTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.inventoryTitle")));
-        String discordTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.discordTitle")));
-        String lastLoginTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.lastLoginTitle")));
-        String registeredTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.registeredTitle")));
-        String discordIdTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.discordIdTitle")));
-        String discordIdDesc = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.discordIdDesc")));
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
+        String inventoryTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.inventoryTitle")));
+        String discordTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.discordTitle")));
+        String lastLoginTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.lastLoginTitle")));
+        String registeredTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.registeredTitle")));
+        String discordIdTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.discordIdTitle")));
+        String discordIdDesc = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.discordIdDesc")));
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("general.chatprefix")));
         Inventory inv = Bukkit.createInventory(null, 27, chatprefix + inventoryTitle);
 
         ItemStack glassPane = createItem(Material.GRAY_STAINED_GLASS_PANE, ChatColor.GRAY + "", "", "");
@@ -120,7 +121,7 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
         ItemStack discordUserId = createItem(Material.MAP, discordIdTitle, discordIdDesc, discorduserid);
 
         if (player.hasPermission("agcminetools.admin") || player.hasPermission("agcminetools.lookup.ip")) {
-            String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.ipAddressTitle")));
+            String ipAddressTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.ipAddressTitle")));
             String ipAddress = getPlayerIpAddress(player.getName());
             ItemStack ipAddressItem = createItem(Material.NAME_TAG, ipAddressTitle, ChatColor.GRAY + ipAddress, "");
             inv.setItem(25, ipAddressItem);
@@ -144,10 +145,10 @@ public class LookupCommandExecutor implements CommandExecutor, Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("settings.chatprefix")));
-        String copyIdChatMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.copyIdChatMessage")));
-        String copyIdChatHover = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.copyIdChatHover")));
-        String inventoryTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("lookup.inventoryTitle")));
+        String chatprefix = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("general.chatprefix")));
+        String copyIdChatMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(MessageConfigManager.getMessage("lookup.copyIdChatMessage")));
+        String copyIdChatHover = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull((MessageConfigManager.getMessage("lookup.copyIdChatHover"))));
+        String inventoryTitle = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull((MessageConfigManager.getMessage("lookup.inventoryTitle"))));
         if (event.getInventory().getHolder() == null && event.getView().getTitle().equals(chatprefix + inventoryTitle)) {
             event.setCancelled(true);
             if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.MAP) {

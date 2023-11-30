@@ -75,6 +75,7 @@ public final class MineTools extends JavaPlugin {
         ICommand UserLookupCommand = new UserLookup(this);
         commandManager.addCommand(SendButtonCommand);
         commandManager.addCommand(UserLookupCommand);
+        new MessageConfigManager(this);
 
         Objects.requireNonNull(this.getCommand("ban")).setExecutor(new BanCommandExecutor(this));
         Objects.requireNonNull(this.getCommand("ban")).setTabCompleter(new BanCommandTabCompleter());
