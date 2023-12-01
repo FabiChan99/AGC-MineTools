@@ -2,7 +2,6 @@ package me.fabichan.agcminetools.Eventlistener;
 
 import me.fabichan.agcminetools.Utils.JDAProvider;
 import me.fabichan.agcminetools.Utils.LinkManager;
-import me.fabichan.agcminetools.Utils.CustomConfigManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -64,7 +63,7 @@ public class MinecraftPlayerJoinListener implements Listener {
                         return;
                     }
                     String discordId = LinkManager.getDiscordId(playerUuid);
-                    User user = jda.retrieveUserById(discordId).complete();
+                    User user = jda.retrieveUserById(Objects.requireNonNull(discordId)).complete();
                     try {
                         if (guild.retrieveBan(user).complete() != null) {
                             String KickMessage = "Du wurdest von unserem Discord-Server gebannt! Es gibt keine Möglichkeit ohne Server-Mitgliedschaft auf dem Minecraft-Server zu spielen.";

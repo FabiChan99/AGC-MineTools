@@ -28,16 +28,27 @@ public class LinkManager {
     }
 
     public static String getLinkDate(UUID mcuuid) {
-        Object result = executeQuery("SELECT linked_at FROM mcusers WHERE uuid = ?", "linked_at", mcuuid.toString());
-        if (result instanceof Timestamp) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return dateFormat.format((Timestamp) result);
-        } else if (result instanceof String) {
-            return (String) result;
-        } else {
-            return "Unknown Date";
+        if (mcuuid == null) {
+            throw new IllegalArgumentException("UUID must not be null");
+        }
+
+        try {
+            Object result = executeQuery("SELECT linked_at FROM mcusers WHERE uuid = ?", "linked_at", mcuuid.toString());
+
+            if (result instanceof Timestamp) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                return dateFormat.format((Timestamp) result);
+            } else if (result instanceof String) {
+                return (String) result;
+            } else {
+                return "Unknown Date";
+            }
+        } catch (Exception e) {
+            BukkitPlugin.getLogger().severe("Fehler beim Abrufen des Verknüpfungsdatums!" + e.getMessage());
+            return "Error retrieving date";
         }
     }
+
 
     public static boolean isPending(String linkCode) {
         return checkIfExists("SELECT * FROM linkcodes WHERE linkcode = ? AND expires_at > CURRENT_TIMESTAMP", linkCode);
@@ -53,7 +64,6 @@ public class LinkManager {
     }
 
     public static String generateLinkCode(UUID minecraftUuid) {
-        // Überprüfe zuerst, ob ein gültiger Code existiert
         String existingCode = checkForExistingCode(minecraftUuid);
         if (existingCode != null) {
             return existingCode;
